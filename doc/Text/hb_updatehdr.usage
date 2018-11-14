@@ -1,0 +1,21 @@
+hb_updatehdr
+.  Reads stations and applies changes to header 
+
+Usage:  hb_updatehdr filename_root(s) [-Ddirname] [-Eextent] [-Mmonth] [-Ccruise] [-Sship] [-Nnation] [-Yyear] [-W][-Iinstrument_code] [-Oorigin_code] [-Qquality_mask]  
+
+    -D  : specifies dirname (default is ./) 
+        ex: -D../data/ 
+    -E  : specifies file extent (default is no extent)
+        ex: -E.dat 
+    -W  : update WMO square designation
+    -M  : update month
+    -C  : update cruise #
+    -S  : update ship code
+    -N  : update country code
+    -Y  : update year
+    -I  : update instrument type: (b,c,f,s,m, or u
+    -O  : update origination code: ('0' .. '9')
+    -Q  : update quality code with a 4-byte mask
+          ex: -Q1000  :  a bitwise OR of this mask is applied to each station's quality bytes.
+    -h  : help -- prints this message
+

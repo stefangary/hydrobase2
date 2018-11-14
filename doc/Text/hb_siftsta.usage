@@ -1,0 +1,37 @@
+
+hb_siftsta determines whether a station has a value of
+a property which falls between specified minima/maxima.
+If so, it prints the station to stdout.
+
+Usage:  hb_siftsta filename_root(s)  -P<property/min/max>  [-D<dirname>] [-E<file_extent>] [-O<outcast_file>]] [-W<window>[/<w_incr>]][-Z<zmin>/<zmax>] [-S<sigmin>/<sigmax>] [-T<tmin>/<tmax>] [-h]
+
+  List of filenames MUST be first argument!
+-P : property mnemonic/min/max;
+          ex:  -Psa/0/30
+               -P (by itself) produces a list of available    properties
+
+   OPTIONS: 
+-D : specifies dirname for input files (default is current directory) 
+            ex: -D../data/ 
+-E : specifies input_file extent (default is no extent)
+            ex: -E.dat 
+-O  : filename for stations which do NOT meet criteria;
+-S : Optional sigma-0 limits min/max to search;
+          ex:  -S27/27.8
+-T : Optional theta limits min/max to search;
+          ex:  -T3/4
+-Z : Optional pressure limits min/max to search;
+          ex:  -Z0/1000
+-W : Specifies pressure window (db) for computing 
+          gradient properties (bvfreq, pv...) This 
+          constitutes the range over which observations
+          are incorporated into the gradient computation.
+          The window is centered around each pressure 
+          level being evaluated.
+          w_incr specifies how finely to subdivide the
+          window into increments(db) to create
+          an evenly spaced pressure series over the window.
+          defaults: -W100/10
+-h :  help...... prints this message. 
+
+

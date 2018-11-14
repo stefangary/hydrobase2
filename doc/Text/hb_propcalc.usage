@@ -1,0 +1,33 @@
+
+
+
+ hb_propcalc 
+ Computes properties at each pressure level
+ in a station and outputs a HydroBase format
+ station file containing all the properties specified
+ with the -P option.
+***************************************************
+Usage:  hb_propcalc filename_root(s)  -P<list_of_properties>   [-W<window>[/<w_incr>]] [-D<dirname>] [-E<file_extent>]
+
+  List of filename (roots) must be first arguments
+-P : properties to list out;
+          ex:  -Ppr/th/sa/ox/ht
+               -P (by itself) produces a list of available properties
+
+   OPTIONS: 
+-W : Specifies pressure window (db) for computing 
+          gradient properties (bvfreq, pv...) This 
+          constitutes the range over which observations
+          are incorporated into the gradient computation.
+          The window is centered around each pressure 
+          level being evaluated.
+          w_incr specifies how finely to subdivide the
+          window into increments(db) to create
+          an evenly spaced pressure series over the window.
+          defaults: -W100/10 
+-D : specifies directory input files (default is current directory) 
+            ex: -D../data/ 
+-E : specifies input_file extent (default is no extent)
+            ex: -E.dat 
+-h help...... prints this message.
+

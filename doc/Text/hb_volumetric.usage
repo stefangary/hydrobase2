@@ -1,0 +1,35 @@
+
+hb_volumetric computes volumetric heat and salinity content over a layer specified by two surfaces
+The layer can be strictly adhered to or relaxed to incorporate values from sea surface (if surface1 outcrops above depth=0) down to the seafloor (if surface2 > value at seafloor)
+The layer can be further limited to a depth range using -Z<zmin/zmax>
+For each gridpoint, outputs a line containing:
+lon, lat, avg_theta, avg_salt, avg_rho, avg_Cp, dz(layer_thickness), dx*dy, heat_content 
+The sum of properties is accumulated and on the last lines are listed the following:
+Total area (km^2)
+Avg thickness of layer (area weighted) (km)
+Total heat content (J)
+Avg theta/unit volume (deg C)
+Avg salinity/unit volume
+Avg density/unit volume (kg/m^3
+
+Usage:  hb_volumetric filename_root(s)  -1<mne[pref]/value> -2<mne[pref]/value[b]> -Ixinc[/yinc] [-D<dirname>] [-E<file_extent>][-Z<zmin/zmax>]
+
+  List of filenames MUST be first argument
+  or input is expected to come from stdin...
+    -1  : surface 1 property/value (if property = s_
+          you need to specify pref after s_
+          Append 't' to start with the first observation level available
+          in the event that it is greater than the property value at the top of the layer specified.   
+    -2  : surface 2 property/value (if property = s_
+          you need to specify pref after s_
+          Append b to integrate to the bottom if this surface
+          is deeper than the bottom.  
+    -I  : specify grid spacing (xinc/yinc) in degrees to compute dx and dy
+   [-D] : specifies dirname for input files (default is current
+          directory)  ex: -D../data/ 
+   [-E] : specifies input_file extent (default is no extent)
+            ex: -E.dat 
+   [-Z] : specify depth limits for layer.
+          Exclude depths that fall outside of these limits from weighted average.
+   [-h] : help... prints this message.
+

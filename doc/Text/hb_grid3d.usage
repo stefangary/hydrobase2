@@ -1,0 +1,58 @@
+hb_grid3d
+
+Computes an average profile for each property specified
+at each lat/lon gridnode from randomly spaced stations.
+Outputs a netCDF file of hydro properties gridded as a 
+function of lat, lon, and depth.  The depth dimension 
+consists of a series of standard depths, optionally 
+specified with -Z. Averaging is done on isopycnal surfaces
+and interpolated back onto the depth levels.  The user
+must specify these density surfaces with -S<pref><filename>.
+The sigma values should be customized to reflect the
+local vertical density stratification.
+
+Usage:  hb_grid3d filename_root(s)  -B/west/east/south/north -C<cdf_output_file> -I<gridspacing> -P<list_of_properties> -S<ref_id>/<sigma_series_file> [-Z<std_depth_file>] [-T<minyr/maxyr>] [-M<mixed_layer_def>] [-W<window>[/<w_incr>]] [-D<dirname>] [-E<file_extent>] 
+
+ -B   specifies grid bounds
+ -C   name of netCDF output file.
+ -I   specifies grid increment in degrees;  ex: -I0.5
+          OR specify separate x,y increments with a slash
+          to delimit xincr/yincr;  ex: -I2.0/0.5
+
+ -P   list of properties to project onto surface;
+          ex:  -Ppr/th/sa/ox/ht
+               -P (by itself) produces a list of available properties
+
+ -S   ref_id = 0,1, 2,3, or 4 
+          Specify EACH reference pressure with its own -S argument
+          filename = file containing sigma series definitions.
+          Each line in file contains sigmin, sigmax, incr
+          (sigmin and sigmax are INCLUSIVE in generating series).
+          Values MUST be monotonically INCREASING.
+
+ OPTIONS:
+ -D  specifies directory for input data files (default is current directory) 
+            ex: -D../data/
+ 
+ -E  specifies input_file extent (default is no extent)
+            ex: -E.dat 
+
+ -M  specify the definition of the mixed layer as 
+          sigma(sea surface) + this value.  default: 0.020000 
+          ex:  -M.02
+ -T  optional minyear/maxyear to constrain time interval of observations.
+ -W  Specifies pressure window (db) for computing 
+          gradient properties (bvfreq, pv...) This 
+          constitutes the range over which observations
+          are incorporated into the gradient computation.
+          The window is centered around each pressure 
+          level being evaluated.
+          w_incr specifies how finely to subdivide the
+          window into increments(db) to create
+          an evenly spaced pressure series over the window.
+          defaults: -W100/10
+ -Z  file containing list of standard depths.
+          Values MUST be monotonically INCREASING.
+
+ -h  help ... prints this message.
+

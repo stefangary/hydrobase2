@@ -1,0 +1,41 @@
+
+hb_extract stations from HydroBase station files by
+a variety of criteria.
+
+Usage: hb_extract filename_root(s) [-Ddirname] [-Eextent] [-H] [-Ooutcast_file] -T[b[^]/bathmin/bathmax]/[c[^]/cruise1/cruise2/...]/[d[^]/depthmin/depthmax]/[l<d_or_p>[^]/minlev/maxlev]/[m[^]/m1/m2/...]/[n[^]/code1/code2/...]/[g[^]/minlon/maxlon/minlat/maxlat]/[i[^]/minsta/maxsta]/[p[^][+]/p1[/p2/p3]]/[s[^]/ship1/ship2/...]/[y[^]/minyear/maxyear]
+
+    -D  : specifies dirname (default is ./) 
+        ex: -D../data/ 
+    -E  : specifies file extent (default is no extent)
+        ex: -E.dat 
+    -H  : output header only
+    -O  : specifies file to which rejected stations are written
+        ex: -OVE1982.sta
+    -T  : specifies type of extraction and criteria
+        b = if bathymetry depth falls between min/max ex:  -Tb/4000/10000
+        c = NODC cruise #  ex:  -Tc/8103/7202/83
+        d = if deepest level sampled falls between min/max ex:  -Td/4000/10000
+        e = by equipment (instrument code). Do not separate codes with a slash (/)
+            ex:  -Tebc  will extract bottle and ctd profiles
+            ex:  -Te^b  extracts all profiles except bottle data
+        g = geographic position  ex:  -Tg/-80/-10/0/60
+        i = by individual station    ex:  -Ti/1/71
+        ld = depth level  ex:  -Tld1000/2000
+        lp = pressure level  ex:   -Tlp^1000/2000
+        m = by month  ex:  -Tm/1/2/3/12
+        n = nation (country code)ex:  -Tn31/90
+        p = properties. Use '+' after p to extract station only
+            if it contains ALL properties in list (logical AND)
+            otherwise it will be extracted if it contains ANY properties in list (logical OR)
+            ex:  -Tp+sa/si  extract if salt AND silicate present
+            ex:  -Tp^ox/o2  extract if  NOT (ox OR o2)
+        s = ship  ex:  -TsVE/6N
+        y = by year   ex:  -Ty/1965/1980
+        combination of above:  -Tg/-80/-10/0/160/m/1/2/3/12
+
+  Use ^ after the extraction type to extract stations
+   which DO NOT meet the criteria. 
+   ex: -Ts^/VE/y1982  to extract all stations from 1982
+       except those collected by the ship VE.
+ -h  help ... prints this message.
+

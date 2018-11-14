@@ -1,0 +1,15 @@
+hb_msq10bounds
+ Accepts a 10-deg MSq and (optional) increment as arguments and
+returns bounds in the proper format: w/e/s/n  .  Specifying
+an increment will enlarge the bounds by half the increment
+-- useful to generate node-grids as opposed to pixel-grids.
+
+Usage:  hb_msq10bounds msq_10 [-I<incr> 
+
+ msq_10 is the 4-digit WMO (Marsden Square).
+ 
+  OPTIONS:
+[-I]  : specifies grid increment.
+        Bounds will be offset by half the increment.
+[-h]  : help -- prints this message.
+

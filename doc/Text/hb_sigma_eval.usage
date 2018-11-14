@@ -1,0 +1,14 @@
+
+hb_sigma_eval determines the min, max, mean, and delta values of potential density (s0 s1 s2 s3 s4) for a set of appropriate pressure ranges.
+
+Usage:  hb_sigma_eval filename_root(s) [-D<dirname>] [-E<file_extent>] [-h] 
+
+  List of filenames MUST be first argument!
+
+   OPTIONS: 
+-D : specifies dirname for input files (default is current directory) 
+        ex: -D../data/ 
+-E : specifies input_file extent (default is no extent)
+        ex: -E.dat 
+-h :  help...... prints this message. 
+

@@ -1,0 +1,7 @@
+hb_tssig
+.  Computes a matrix of sigma values  for specified salinity 
+.  and theta ranges.  Useful for generating density contours in
+.  T-S plots. Sigma is computed from specific
+.   volume anomaly based on 1980 equation of state (Millero, et al., 1980).
+
+USAGE:  hb_tssig pref smin smax sincr th_min th_max th_incr > outfile

@@ -1,0 +1,6 @@
+hb_theta
+Computes potential temperature from specified
+values of pressure, in situ temp, and salt
+
+Usage:  hb_theta  p  t  s  
+

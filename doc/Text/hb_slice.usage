@@ -1,0 +1,37 @@
+hb_slice
+For a list of positions (lon/lat pairs) and set of HydroBase gridded 
+    cdf files, produces a HydroBase station file containing "stations" 
+    that lie along the line connecting the positions.  In essence the
+    positions define a pathway along which a vertical slice is cut
+    through the 3D gridded property fields.
+    
+Usage:  hb_slice cdf_file(s) -I<delta_x[/delta_y]>  -P<list_of_properties> [-O<outfile>] [-G] [-L<position_file>] [-D<dirname>] [-E<file_extent>] -W<window>[/<w_incr>]] 
+
+  List of filenames must be first argument 
+ -I  : xgrid[/ygrid] increment in degrees.  
+ -P  : list of properties for output;
+       ex:  -Ppr/th/sa/ox/ht
+            -P (by itself) produces a list of available properties
+
+   OPTIONS:  
+[-D] : directory for input cdf files  
+            ex: -D../data/ 
+[-E] : file extent for input cdf files
+            ex: -E.dat 
+[-G] : Gridnodes fall on whole degrees in cdf files
+       default is gridlines offset by 0.5 * gridinc (pixel registration)
+[-L] : file containing list of lon/lat positions.
+       If not specified, this list will be read from stdin 
+[-O] : name of output file
+[-W] : Specifies pressure window (db) for computing 
+       gradient properties (bvfreq, pv...) This 
+       constitutes the range over which observations
+       are incorporated into the gradient computation.
+       The window is centered around each pressure 
+       level being evaluated.
+       w_incr specifies how finely to subdivide the
+       window into increments(db) to create
+       an evenly spaced pressure series over the window.
+       defaults: -W100/10
+[-h] : help -- prints this message.
+

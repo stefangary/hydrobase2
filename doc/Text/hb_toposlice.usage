@@ -1,0 +1,35 @@
+
+hb_toposlice 
+Outputs bathymetry along a pathway specified
+as a list of lon/lat positions. The default bathymetry database
+is /usr/local/hydrobase/lib/topo.onetenthdeg.swap.dat 
+An alternative file may be specified with the -T option. 
+If the input grid spacing is other than 0.10, specify grid increment
+with -I.  Pathway must be a minimum of 2 points, but can be
+multiple points. -L specifies filename containing these points.
+If no posfile is specified, the points are expected from stdin.
+Lon/lat/z values are written to outfile or stdout.
+ -D causes the distance along the pathway to be written
+out as a fourth column.
+To generate an xy mask file for use with hb_fitsection,
+specify -M<xval> where xval is 1, 2, or 3 (lon, lat or distance)
+
+Usage:  hb_toposlice  [-T<global_topo_file>] [-I<xincr[/yincr]>][-D[k]] [-L<posfile>] [-M<xval>] [-N] [-O<outfile>]
+
+   OPTIONS:
+[-D] : include distance (nautical miles) in output. 
+       Append k for distance in km [-Dk]. 
+[-I] : specify grid increments of input topo file. 
+        ex: -I.1/.5   Default increment is  [0.10/0.10]
+[-L] : position file contains lon/lat pairs (one per line) to define pathway
+[-M] : outputs xy values for use as a mask file with hb_fitsection.
+       specify xval = 1 for longitude
+                    = 2 for latitude
+                    = 3 for distance
+       Info is added at beginning and end for polygon masking mode.
+[-N] : make seafloor values negative. 
+          [default is seafloor positive] 
+[-O] : output file. If not specified output stdout
+[-T] : specify name of binary topography file. Default[/usr/local/hydrobase/lib/topo.onetenthdeg.swap.dat]
+[-h] : help -- prints this message.
+

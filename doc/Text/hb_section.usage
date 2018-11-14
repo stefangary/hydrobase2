@@ -1,0 +1,42 @@
+hb_section
+
+Computes properties at each pressure level in a station and outputs
+an ascii listing of each observed level containing all
+properties specified with the -X -Y and -Z options.
+
+USAGE:  hb_section filename(_roots) -X<prop> -Y<prop> -Z<prop> [-D<dirname>] [-E<file_extent>] [-K] [-S<sta_dist_file>] [-W<window>[/<w_incr>] 
+
+  List of filenames MUST be first argument or input is expected to come from stdin
+-X : x-property: [la]t,[lo]n, or [di]stance;
+          ex:  -Xlo
+               -X (by itself) produces a list of available properties
+-Y : y-property:  2char mnemonic
+          ex:  -Ypr
+               -Y (by itself) produces a list of available properties
+-Z : Z-property:  2char mnemonic
+          ex:  -Zpr
+               -Z (by itself) produces a list of available properties
+
+   OPTIONS: 
+-D : specifies dirname for input files (default is current directory) 
+            ex: -D../data/ 
+-E : specifies input_file extent (default is no extent)
+            ex: -E.dat 
+-F : force longitudes to be 0 - 360 for crossing the dateline (default is -180 to 180).
+-K : distances are in km (default is nm).
+-S : specifies name of file containing station/distance/depth for 
+     assigning distance along track for each cast.  If this option is not
+     used, distance is computed from lat/lon.  ex: -Skn104.ctd.depth 
+-W : Specifies pressure window (db) for computing 
+     gradient properties (buoyancy frequency, pot vorticity...)
+     This constitutes the range over which observations
+     are incorporated into the gradient computation
+     and acts as a low pass filter on the output profile.
+     The window is centered around each pressure level being evaluated.
+     w_incr specifies how finely to subdivide the
+     window into increments(db) to create
+     an evenly spaced pressure series over the window.
+     defaults: -W100/10 
+-h : help...... prints this message. 
+
+

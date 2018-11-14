@@ -1,0 +1,31 @@
+
+hb_foverh outputs {lon,lat,f/H} triplets, where H is specified in one of several ways:
+ - as an input file that directly specifies lon/lat/H triplets
+ - use bathymetric depth for H
+ - specify 2 xyz-files -- the depths of an upper and lower surface
+      which will be subtracted to produce H (layer thickness)
+ - specify an upper surface (xyz-file) and use  
+      bathymetry as the lower surface.   
+
+Usage:  hb_foverh   [-B<w/e/s/n>] [-H<xyz_file>] [-I<xincr[/yincr]>] [-L<lower_xyz_file>] [-N] [-O<outfile>] [-T<topofile>] [-U<upper_xyz_file>] 
+
+   OPTIONS:
+[-B] : specify output grid bounds. [Default: 0/360/-90/90]
+        Necessary when using -U and -L options to define H
+        OR when using bathymetery alone to define H.
+        Meaningless when using -H option or -U alone.
+[-H] : file of lon/lat/H triplets 
+[-I] : specify output x- and y-grid increments when output is gridded data. 
+        ex: -I.1/.5    default increment is .1 
+[-L] : file defining lon/lat/depth of lower surface. 
+        Requires -U option.
+[-O] : output file. Default is stdout
+[-T] : specify full pathname of binary topography file.  
+       Default is [/usr/local/hydrobase/lib/topo.onetenthdeg.swap.dat]
+[-U] : file defining lon/lat/depth of upper surface.
+        If no -L<lower_surface_file>,  seafloor depth
+        will be used as lower surface.
+[-:] : lat is in column 1, lon column 2, for input files. 
+         Default order is lon,lat
+[-h] : help -- prints this message.
+

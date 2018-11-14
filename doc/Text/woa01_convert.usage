@@ -1,0 +1,10 @@
+
+Converts World Ocean Atlas 2001 1-deg analyzed fields
+to HydroBase *.cdf files.  Output files are named by
+to 4-digit WMOsq with extent .woa01.cdf
+Usage:  woa01_convert [-Ooutdir] [-D<dirname>] [-E<file_extent>] [-h]
+-D : directory for input files t00an1, s00an1, o00an1, etc... 
+     (default is current directory) ex: -D../data/ 
+-O : directory for output files.
+-h : help...... prints this message. 
+

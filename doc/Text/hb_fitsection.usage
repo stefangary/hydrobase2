@@ -1,0 +1,43 @@
+hb_fitsection - A Laplacian interpolation algorithm for vertical sections.
+
+USAGE: hb_fitsection [xyzfile(s)] -I<dx>[/<dy>] -B<xmin/xmax/ymin/ymax> [-O<output_file>] [-E[nan]/[nan]] [-P] [-C<converge_limit> ]  [-M<mask_file> ] [-N<new_mask_file> ] [-Q<max_iterations>] [-S<xradius>/<yradius> ] [-T<tension> ]  [-:] [-h]
+
+-B   sets the grid bounds in user units: xmin/xmax/ymin/ymax.
+-I   sets the grid spacing for the x/y directions.
+
+	OPTIONS:
+-C  set the convergence limit [0.00000]
+-E  Explicity write out nodes that are empty or masked.
+       Without -E, only non-empty, non-masked gridnodes are written out.
+       Optionally use NaN instead of [-9.000e+34] for empty nodes
+       and/or NaN instead of [9.000e+34] for masked nodes
+       Specify -Enan  for empty nodes
+               -E/nan  for masked nodes
+               -Enan/nan for both empty and masked.
+-P  force pixel registration (default is gridnode registration).
+-M name of file containing masking info.
+      Each line of file may specify individual points to mask
+      or multiple polygons separated by a '>' character. 
+      Specify 'I' or 'O' immediately after the '>' character
+      to mask INSIDE or OUTSIDE of polygon.
+      No '>' or a 'C' immediately after the '>'  
+      signifies cell mode masking.  In this mode}
+      an {x,y} pair OR {x,y,mask} triplet is given.
+      The <mask> value can be 1 to mask the point
+      or 0 (zero) to unmask the point.
+-N name of new file for x/y pairs of empty or masked gridnodes after the interpolation.
+-O  name of output file  (default is stdout).
+-Q sets the max convergence iterations.  [1]
+-S set a search radius in integer grid increments
+      for x and y directions.  If no data are 
+      within range of a node it is set to empty.
+      Default is [-S3/5]
+-T tension parameter -- range [0..1]
+      A value of 1 produces a pure laplacian solution,
+      while a 0 value gives a harmonic spline
+      interpolation with a smoother field but the possibility of 
+      spurious peaks or valleys.
+      Default is [0.50] 
+-: input data are ordered y x z  
+       [default order is x y z]   
+-h help....prints this message.  

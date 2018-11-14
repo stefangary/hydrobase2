@@ -1,0 +1,18 @@
+hb_rangechk_ts 
+Checks T and S values against ranges specified in rangefile.  Bad scans are put into a badfile, acceptable scans are output to outfile.
+Usage:  hb_rangechk_ts list_of_infile(s) -B<badfile> -R<rangefile> -O<outfile> [-Llogfile] [-h] 
+ List of infiles should be first argument(s) 
+   -R  : specifies file containing min/max values for acceptable depth, theta, salt 
+        ex: -R7102.ranges 
+   -B  : specifies output file for bad scans.
+        ex: -I7102.rbad 
+   -O  : specifies output file for good scans.  
+        ex: -O7102.rchk 
+   -D  : specifies dir for input files (default is ./) 
+        ex: -D../data/ 
+   -E  : specifies file extent for input files (default is no extent)
+        ex: -E.dat 
+  [-L] : specifies file to which log info is written 
+        ex: -L7102.rchklog 
+  [-h] : help -- prints this message. 
+

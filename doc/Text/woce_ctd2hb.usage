@@ -1,0 +1,20 @@
+
+woce_ctd2hb 
+Converts WOCE ctd format files to HydroBase2 station format
+By default, the 2db pressure series is decimated to 10 db, but the -P option permits the user to specify the output pressure interval.  A gaussian filter is by default applied to the temperature, salinity, and oxygen profiles.  To omit the filtering, specify filterwidth of 1/1 with the -F option.  You may also specify alternative filterwidths.  The necessary arguments are a list of ctd filenames, the name of the sumfile, and an output filename. 
+
+Usage:  woce_ctd2hb filelist -Ooutfile -Ssumfile [-Pprs_int]  [-F<filtwidth>[/<ox_filtwidth>]] [-D<dirname>] [-E<file_extent>]
+
+  List of filenames MUST be first argument!
+    -O  : specifies output file 
+    -S  : specifies summary info file 
+   [-P] : specifies pressure interval of output series (default is 10) 
+   [-F] : specifies filterwidth (npts) or t,s and ox (default is 5/11) 
+   [-D] : specifies dirname for input files (default is current directory) 
+            ex: -D../data/ 
+   [-E] : specifies input_file extent (default is no extent)
+            ex: -E.dat 
+   [-T] : input temperatures are T68 (default is T90) 
+   [-X] : input oxygen units are  ml/l (default is umoles/kg) 
+   [-h] : help -- prints this message
+

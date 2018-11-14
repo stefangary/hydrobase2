@@ -1,0 +1,8 @@
+
+hb_cdf2asc converts a binary HydroBase cdf file into an ascii
+HydroBase station file where each gridnode becomes 
+a pseudo-station.
+
+Usage: hb_cdf2asc cdf_file_name [-h] 
+    OPTIONS:
+-h help...... prints this message. 

@@ -1,0 +1,18 @@
+woce_btl2hb
+Converts WHP bottle files to HydroBase station format
+
+Usage:  woce_btl2hb filelist -Ssumfile [-D<dirname>] [-E<file_extent>] [-Ooutfile] [-T] [-X] [-h]
+
+  List of filenames MUST be first argument
+ -S  : summary info file. ex:  316N151.sum 
+
+   OPTIONS: 
+[-D] : dirname for input files (default is current directory) 
+            ex: -D../data/ 
+[-E] : input_file extent (default is no extent)
+            ex: -E.dat 
+[-O] : output file 
+[-T] : input temperatures are T68 (default is T90) 
+[-X] : input oxygen units are  ml/l (default is umoles/kg) 
+-h : help...... prints this message.
+

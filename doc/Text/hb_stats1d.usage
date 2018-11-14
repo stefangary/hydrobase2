@@ -1,0 +1,13 @@
+hb_stats1d
+
+Reads x-y pairs and computes mean and standard deviation
+of y for the x binned according to min/max/increment 
+specified with the -R argument. Input and output files can be
+specified -- or the stdin and stdout devices will be used
+
+Usage:  hb_stats1d input_file_list [-O<output_file>]  -R<min/max/incr> 
+ [-O] : specifies optional output file
+        default is stdout 
+  -R  : specify minimum/maximum/[delta] to create x bins. 
+        ex: -R1920/1995/5    default delta is 1 
+

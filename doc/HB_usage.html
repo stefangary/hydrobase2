@@ -1,0 +1,1880 @@
+<!DOCTYPE html PUBLIC "-//IETF//DTD HTML 2.0//EN">
+<HTML>
+<HEAD>
+<TITLE>HydroBase2 Modules</TITLE>
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000" LINK="#1F00FF" ALINK="#FF0000" VLINK="#9900DD">
+<A NAME="top">
+<H1>HydroBase2 Modules</H1>
+<OL>
+  <LI><A HREF="#file1">hb_4matlab</A>
+  <LI><A HREF="#file3">hb_cdf2asc</A>
+  <LI><A HREF="#file4">hb_cdfinfo</A>
+  <LI><A HREF="#file5">hb_coriolis</A>
+  <LI><A HREF="#file6">hb_decimate</A>
+  <LI><A HREF="#file7">hb_extract</A>
+  <LI><A HREF="#file8">hb_findblanks</A>
+  <LI><A HREF="#file9">hb_fit3d</A>
+  <LI><A HREF="#file10">hb_fitsection</A>
+  <LI><A HREF="#file11">hb_fitsurf2d</A>
+  <LI><A HREF="#file12">hb_foverh</A>
+  <LI><A HREF="#file13">hb_getbottom</A>
+  <LI><A HREF="#file14">hb_getpos</A>
+  <LI><A HREF="#file15">hb_gettrack</A>
+  <LI><A HREF="#file16">hb_grid2xyz</A>
+  <LI><A HREF="#file17">hb_grid3d</A>
+  <LI><A HREF="#file18">hb_gridsurf2d</A>
+  <LI><A HREF="#file19">hb_layerav</A>
+  <LI><A HREF="#file20">hb_layerinteg</A>
+  <LI><A HREF="#file21">hb_msq10bounds</A>
+  <LI><A HREF="#file22">hb_mssort</A>
+  <LI><A HREF="#file23">hb_propcalc</A>
+  <LI><A HREF="#file24">hb_rangechk_ts</A>
+  <LI><A HREF="#file26">hb_section</A>
+  <LI><A HREF="#file27">hb_siftlevs</A>
+  <LI><A HREF="#file28">hb_siftsta</A>
+  <LI><A HREF="#file29">hb_sigma024_eval</A>
+  <LI><A HREF="#file30">hb_sigma_eval</A>
+  <LI><A HREF="#file31">hb_sigma</A>
+  <LI><A HREF="#file32">hb_slice</A>
+  <LI><A HREF="#file33">hb_smooth2d</A>
+  <LI><A HREF="#file34">hb_smooth3d</A>
+  <LI><A HREF="#file35">hb_statchk_ts</A>
+  <LI><A HREF="#file36">hb_statfit_ts</A>
+  <LI><A HREF="#file37">hb_stationsort</A>
+  <LI><A HREF="#file38">hb_stats1d</A>
+  <LI><A HREF="#file39">hb_surfdiff</A>
+  <LI><A HREF="#file40">hb_surf</A>
+  <LI><A HREF="#file41">hb_theta</A>
+  <LI><A HREF="#file42">hb_topo2xyz</A>
+  <LI><A HREF="#file43">hb_toposlice</A>
+  <LI><A HREF="#file44">hb_tssig</A>
+  <LI><A HREF="#file45">hb_updatehdr</A>
+  <LI><A HREF="#file46">hb_update_pdr</A>
+  <LI><A HREF="#file47">hb_volumetric_anom</A>
+  <LI><A HREF="#file48">hb_volumetric</A>
+  <LI><A HREF="#file49">hb_xyprop</A>
+  <LI><A HREF="#file50">ices_convert</A>
+  <LI><A HREF="#file51">sac_convert</A>
+  <LI><A HREF="#file52">woa01_convert</A>
+  <LI><A HREF="#file53">woa98_convert</A>
+  <LI><A HREF="#file54">woce_btl2hb</A>
+  <LI><A HREF="#file55">woce_ctd2hb</A>
+  <LI><A HREF="#file56">wod01_convert</A>
+  <LI><A HREF="#file57">wod98_convert</A>
+</OL>
+<HR>
+<A NAME="file1">
+<H1>hb_4matlab</H1>
+[<A HREF="#top">top</A>][prev][<A HREF="#file2">next</A>]
+<PRE>
+
+***********************************************************
+Computes properties specified with -P option at each depth level in a station 
+ and outputs an ascii listing of each level plus the lat/lon/year/month/station/cruise of the observation.
+***********************************************************
+
+Usage:  hb_4matlab filename_root(s)  -P&lt;list_of_properties&gt;  [-D&lt;dirname&gt;] [-E&lt;file_extent&gt;] [-W&lt;window&gt;/&lt;w_incr&gt;]
+
+  List of filenames MUST be first argument!
+    -P  : list of properties to project onto surface;
+          ex:  -Ppr/th/sa/ox/ht
+               -P (by itself) produces a list of available properties
+   [-L] : option to output lat/lon 
+   [-Y] : option to output year 
+   [-M] : option to output month 
+   [-S] : option to output station#/cruise# 
+   [-D] : specifies dirname for input files (default is current directory) 
+            ex: -D../data/ 
+   [-E] : specifies input_file extent (default is no extent)
+            ex: -E.dat 
+   [-W] : Specifies pressure window (db) for computing 
+          gradient properties (bvfreq, pv...) This 
+          constitutes the range over which observations
+          are incorporated into the gradient computation.
+          The window is centered around each pressure 
+          level being evaluated.
+          w_incr specifies how finely to subdivide the
+          window into increments(db) to create
+          an evenly spaced pressure series over the window.
+          defaults: -W100/10
+    [-h] help...... prints this message. 
+
+
+</PRE>
+<HR>
+<A NAME="file3">
+<H1>hb_cdf2asc</H1>
+[<A HREF="#top">top</A>][<A HREF="#file2">prev</A>][<A HREF="#file4">next</A>]
+<PRE>
+***********************************************************
+Converts a binary HydroBase cdf file into an ascii
+HydroBase station file where each gridnode becomes 
+a pseudo-station.
+***********************************************************
+
+Usage: hb_cdf2asc cdf_file_name [-h] 
+    OPTIONS:
+-h help...... prints this message. 
+</PRE>
+<HR>
+<A NAME="file4">
+<H1>hb_cdfinfo </H1>
+[<A HREF="#top">top</A>][<A HREF="#file3">prev</A>][<A HREF="#file5">next</A>]
+<PRE>
+***********************************************************
+Prints out various information about the 
+contents of a HydroBase cdf_file
+***********************************************************
+
+Usage: hb_cdfinfo cdf_file_name 
+       hb_cdfinfo -h .... prints this message. 
+</PRE>
+<HR>
+<A NAME="file5">
+<H1>hb_coriolis </H1>
+[<A HREF="#top">top</A>][<A HREF="#file4">prev</A>][<A HREF="#file6">next</A>]
+<PRE>
+
+***********************************************************
+Returns Coriolis parameter for a given latitude
+***********************************************************
+
+Usage: hb_coriolis &lt;latitude&gt;
+</PRE>
+<HR>
+<A NAME="file6">
+<H1>hb_decimate </H1>
+[<A HREF="#top">top</A>][<A HREF="#file5">prev</A>][<A HREF="#file7">next</A>]
+<PRE>
+
+***********************************************************
+Reads each station in a HydroBase file and outputs a new file with observations at the specified pressure interval
+***********************************************************
+
+Usage:  hb_decimate filename_root(s)  -P&lt;prsint&gt;    [-D&lt;dirname&gt;] [-E&lt;file_extent&gt;] [-h]
+
+  List of filenames MUST be first argument
+  or station input is expected from stdin.
+    -P  : list of properties to project onto surface;
+          ex:  -Ppr/th/sa/ox/ht
+               -P (by itself) produces a list of available properties
+   [-D] : specifies dirname for input files (default is current directory) 
+            ex: -D../data/ 
+   [-E] : specifies input_file extent (default is no extent)
+            ex: -E.dat -h help...... prints this message. 
+
+
+</PRE>
+<HR>
+<A NAME="file7">
+<H1>hb_extract </H1>
+[<A HREF="#top">top</A>][<A HREF="#file6">prev</A>][<A HREF="#file8">next</A>]
+<PRE>
+
+***********************************************************
+Extracts stations from HydroBase station files by a variety of criteria.
+***********************************************************
+
+Usage: hb_extract filename_root(s) [-Ddirname] [-Eextent] [-H] [-Ooutcast_file] -T[b[^]/bathmin/bathmax]/[c[^]/cruise1/cruise2/...]/[d[^]/depthmin/depthmax]/[l&lt;d_or_p&gt;[^]/minlev/maxlev]/[m[^]/m1/m2/...]/[n[^]/code1/code2/...]/[g[^]/minlon/maxlon/minlat/maxlat]/[i[^]/minsta/maxsta]/[p[^][+]/p1[/p2/p3]]/[s[^]/ship1/ship2/...]/[y[^]/minyear/maxyear]
+
+    -D  : specifies dirname (default is ./) 
+        ex: -D../data/ 
+    -E  : specifies file extent (default is no extent)
+        ex: -E.dat 
+    -H  : output header only
+    -O  : specifies file to which rejected stations are written
+        ex: -OVE1982.sta
+    -T  : specifies type of extraction and criteria
+        b = if bathymetry depth falls between min/max ex:  -Tb/4000/10000
+        c = NODC cruise #  ex:  -Tc/8103/7202/83
+        d = if deepest level sampled falls between min/max ex:  -Td/4000/10000
+        e = by equipment (instrument code). Do not separate codes with a slash (/)
+            ex:  -Tebc  will extract bottle and ctd profiles
+            ex:  -Te^b  extracts all profiles except bottle data
+        g = geographic position  ex:  -Tg/-80/-10/0/60
+        i = by individual station    ex:  -Ti/1/71
+        ld = depth level  ex:  -Tld1000/2000
+        lp = pressure level  ex:   -Tlp^1000/2000
+        m = by month  ex:  -Tm/1/2/3/12
+        n = nation (country code)ex:  -Tn31/90
+        p = properties. Use '+' after p to extract station only
+            if it contains ALL properties in list (logical AND)
+            otherwise it will be extracted if it contains ANY properties in list (logical OR)
+            ex:  -Tp+sa/si  extract if salt AND silicate present
+            ex:  -Tp^ox/o2  extract if  NOT (ox OR o2)
+        s = ship  ex:  -TsVE/6N
+        y = by year   ex:  -Ty/1965/1980
+        combination of above:  -Tg/-80/-10/0/160/m/1/2/3/12
+
+  Use ^ after the extraction type to extract stations
+   which DO NOT meet the criteria. 
+   ex: -Ts^/VE/y1982  to extract all stations from 1982
+       except those collected by the ship VE.
+ -h  help ... prints this message.
+
+</PRE>
+<HR>
+<A NAME="file8">
+<H1>hb_findblanks </H1>
+[<A HREF="#top">top</A>][<A HREF="#file7">prev</A>][<A HREF="#file9">next</A>]
+<PRE>
+***********************************************************
+Reads a file of gridded xyz values, identifies gridpoints
+which contain no data, and writes lon/lat of those points to stdout. 
+***********************************************************
+Usage:  hb_findblanks xyz_file(s) -Bwest/east/south/north -Ideltax/deltay  &gt; output_file
+   -B : specifies grid bounds. Ex: -B-80/0/0/65
+   -I : specifies grid increments. Ex: -I1/.5
+
+</PRE>
+<HR>
+<A NAME="file9">
+<H1>hb_fit3d</H1>
+[<A HREF="#top">top</A>][<A HREF="#file8">prev</A>][<A HREF="#file10">next</A>]
+<PRE>
+***********************************************************
+Uses an iterative Laplacian/spline algorithm to isopycnally interpolate missing
+gridpoints in HydroBase cdf files. Location of missing values are determined 
+from the topography file (can be specified with -W). A search radius parameter
+determines the maximum acceptable distance an interpolated value can be from an observed value.  The input domain is expanded relative to the output domain so that data around borders of the grid can be incorporated. All input cdf files 
+must possess the same depth dimensions and grid spacing.  The output cdf file will have the same depth dimension, but the lat/lon dimensions specified with -B&lt;w/e/s/n&gt; and -I&lt;x/yincr&gt;
+***********************************************************
+
+USAGE:  hb_fit3d cdf_file(s) -B&lt;w/e/s/n&gt; -I&lt;x_inc&gt;[/&lt;y_inc&gt;] -O&lt;outfile&gt; -P&lt;properties&gt; [-D&lt;input_dir&gt;] [-E&lt;input_file_extent&gt;] [-G] [-Q&lt;max_iterations&gt;] [-Ssearch_radius] [-T&lt;tension&gt;[b|i]] [-U&lt;topo_xinc/yinc&gt;] [-W&lt;topofile&gt;] [-V] [-h] [-:]
+
+ -B  sets the output grid bounds w/e/s/n.
+ -I  sets the output grid spacing for x/y dimensions.
+ -O  name of output cdf file.
+ -P  list of properties to include in output file
+        ex:  -Ppr/th/sa/ox/ht
+       -P (by itself) produces a list of available properties
+
+	OPTIONS:
+-D directory for input cdf files.
+-E file extent for input cdf files.
+-G force gridnode registration for ouput (default is pixel registration).
+-Q sets the max iterations to achieve convergence.  [10]
+-S search for a non-empty gridnode within &lt;xradius/yradius&gt; of an empty node
+      in the initial grid.  Estimate a value only if a non-empty node is found.
+      x- yradii are specified in xy-units (degrees) .
+      &lt;radius&gt; = 0 interpolates no gridnodes but puts in masking info.
+      Default is [2.0/2.0]
+-T tension parameter -- range [0..1]
+      A value of 1 produces a pure laplacian solution,
+      while a 0 value gives a harmonic spline solution
+      with a smoother field but the possibility of 
+      spurious peaks or valleys. Default: [-T0.500000]
+-U  xinc/yinc for topography file: Default is [0.1] 
+-V verbose.  
+-W  full pathname of topography file. This is a binary file of global
+     topography values stored as 2-byte integers beginning at
+     90S, 0E. The default file is [/usr/local/hydrobase/lib/topo.onetenthdeg.swap.dat]
+-V verbose.  
+-h help...... prints this message. 
+</PRE>
+<HR>
+<A NAME="file10">
+<H1>hb_fitsection </H1>
+[<A HREF="#top">top</A>][<A HREF="#file9">prev</A>][<A HREF="#file11">next</A>]
+<PRE>
+***********************************************************
+A Laplacian interpolation algorithm for vertical sections.
+***********************************************************
+
+USAGE: hb_fitsection [xyzfile(s)] -I&lt;dx&gt;[/&lt;dy&gt;] -B&lt;xmin/xmax/ymin/ymax&gt; [-O&lt;output_file&gt;] [-E[nan]/[nan]] [-P] [-C&lt;converge_limit&gt; ]  [-M&lt;mask_file&gt; ] [-N&lt;new_mask_file&gt; ] [-Q&lt;max_iterations&gt;] [-S&lt;xradius&gt;/&lt;yradius&gt; ] [-T&lt;tension&gt; ]  [-:] [-h]
+
+-B   sets the grid bounds in user units: xmin/xmax/ymin/ymax.
+-I   sets the grid spacing for the x/y directions.
+
+	OPTIONS:
+-C  set the convergence limit [0.00000]
+-E  Explicity write out nodes that are empty or masked.
+       Without -E, only non-empty, non-masked gridnodes are written out.
+       Optionally use NaN instead of [-9.000e+34] for empty nodes
+       and/or NaN instead of [9.000e+34] for masked nodes
+       Specify -Enan  for empty nodes
+               -E/nan  for masked nodes
+               -Enan/nan for both empty and masked.
+-P  force pixel registration (default is gridnode registration).
+-M name of file containing masking info.
+      Each line of file may specify individual points to mask
+      or multiple polygons separated by a '&gt;' character. 
+      Specify 'I' or 'O' immediately after the '&gt;' character
+      to mask INSIDE or OUTSIDE of polygon.
+      No '&gt;' or a 'C' immediately after the '&gt;'  
+      signifies cell mode masking.  In this mode}
+      an {x,y} pair OR {x,y,mask} triplet is given.
+      The &lt;mask&gt; value can be 1 to mask the point
+      or 0 (zero) to unmask the point.
+-N name of new file for x/y pairs of empty or masked gridnodes after the interpolation.
+-O  name of output file  (default is stdout).
+-Q sets the max convergence iterations.  [1]
+-S set a search radius in integer grid increments
+      for x and y directions.  If no data are 
+      within range of a node it is set to empty.
+      Default is [-S3/5]
+-T tension parameter -- range [0..1]
+      A value of 1 produces a pure laplacian solution,
+      while a 0 value gives a harmonic spline
+      interpolation with a smoother field but the possibility of 
+      spurious peaks or valleys.
+      Default is [0.50] 
+-: input data are ordered y x z  
+       [default order is x y z]   
+-h help....prints this message.  
+</PRE>
+<HR>
+<A NAME="file11">
+<H1>hb_fitsurf2d </H1>
+[<A HREF="#top">top</A>][<A HREF="#file10">prev</A>][<A HREF="#file12">next</A>]
+<PRE>
+hb_fitsurf2d
+
+***********************************************************
+Uses a Laplacian/spline algorithm to fit a surface to xyz data.
+***********************************************************
+
+USAGE:  hb_fitsurf2d xyzfile(s) -B&lt;w/e/s/n&gt; -I&lt;x_inc&gt;[/&lt;y_inc&gt;] [-C&lt;converge_limit&gt;] [-E[nan[/nan]]] [-G] [-M&lt;maskfile&gt;] [-N&lt;new_maskfile&gt;] [-Ooutfile] [-Q&lt;max_iterations&gt;] [-S&lt;xradius&gt;[/&lt;yradius&gt;]] [-T&lt;tension&gt;] [-V] [-h] [-:]
+
+-B  sets the grid bounds w/e/s/n.
+-I  sets the grid spacing for the x/y directions.
+
+	OPTIONS:
+-C  set the convergence criteria. Default is 0.000000
+-E  Explicity write out nodes that are empty or masked.
+       Without -E, only non-empty, non-masked gridnodes are written out.
+       Optionally use NaN instead of [-9.000e+34] for empty nodes
+       and/or NaN instead of [9.000e+34] for masked nodes
+       Specify -Enan  for empty nodes
+               -E/nan  for masked nodes
+               -Enan/nan for both empty and masked.
+-G force gridnode registration (default is pixel registration).
+-M name of input file containing masking info.
+      Each line of file may specify individual points to mask
+      or multiple polygons separated by a '&gt;' character. 
+      Specify 'I' or 'O' immediately after the '&gt;' character
+      to mask INSIDE or OUTSIDE of polygon.
+      No '&gt;' or a 'C' immediately after the '&gt;'  
+      signifies cell mode masking for individual gridnodes.
+      In this mode an [x,y] pair OR [x,y,mask] triplet
+      is given. The &lt;mask&gt; value can be 1 to mask the point
+      or 0 (zero) to unmask the point.
+-N name of new file for lon/lat pairs of masked gridnodes after the fitting.
+-O name of output file  (default is stdout).
+-Q sets the max iterations to achieve convergence.  [1]
+-S search radius in integer grid increments
+      for x and y directions.  If no data are 
+      within range of a node it is set to empty.
+      If -E is set, the grid points are written to outfile
+      with z set to -9e34 or NaN. If -E is not set
+      the grid point is omitted from outfile. If -N is set, the x,y
+      coordinates are listed in the new_maskfile.
+      Default is [-S1/1]
+-T tension parameter -- range [0..1]
+      A value of 1 produces a pure laplacian solution,
+      while a 0 value gives a harmonic spline
+      solution with a smoother field but the possibility of 
+      spurious peaks or valleys.  Default: [1.00]
+-V verbose.  
+-: all input files (xyz and mask) are ordered lat/lon  
+      [default order is lon/lat]   
+-h help...... prints this message. 
+</PRE>
+<HR>
+<A NAME="file12">
+<H1>hb_foverh </H1>
+[<A HREF="#top">top</A>][<A HREF="#file11">prev</A>][<A HREF="#file13">next</A>]
+<PRE>
+
+***********************************************************
+Outputs {lon,lat,f/H} triplets, where H is specified in one of several ways:
+ - as an input file that directly specifies lon/lat/H triplets
+ - use bathymetric depth for H
+ - specify 2 xyz-files -- the depths of an upper and lower surface
+      which will be subtracted to produce H (layer thickness)
+ - specify an upper surface (xyz-file) and use  
+      bathymetry as the lower surface.   
+***********************************************************
+
+Usage:  hb_foverh   [-B&lt;w/e/s/n&gt;] [-H&lt;xyz_file&gt;] [-I&lt;xincr[/yincr]&gt;] [-L&lt;lower_xyz_file&gt;] [-N] [-O&lt;outfile&gt;] [-T&lt;topofile&gt;] [-U&lt;upper_xyz_file&gt;] 
+
+   OPTIONS:
+[-B] : specify output grid bounds. [Default: 0/360/-90/90]
+        Necessary when using -U and -L options to define H
+        OR when using bathymetery alone to define H.
+        Meaningless when using -H option or -U alone.
+[-H] : file of lon/lat/H triplets 
+[-I] : specify output x- and y-grid increments when output is gridded data. 
+        ex: -I.1/.5    default increment is .1 
+[-L] : file defining lon/lat/depth of lower surface. 
+        Requires -U option.
+[-O] : output file. Default is stdout
+[-T] : specify full pathname of binary topography file.  
+       Default is [/usr/local/hydrobase/lib/topo.onetenthdeg.swap.dat]
+[-U] : file defining lon/lat/depth of upper surface.
+        If no -L&lt;lower_surface_file&gt;,  seafloor depth
+        will be used as lower surface.
+[-:] : lat is in column 1, lon column 2, for input files. 
+         Default order is lon,lat
+[-h] : help -- prints this message.
+
+</PRE>
+<HR>
+<A NAME="file13">
+<H1>hb_getbottom </H1>
+[<A HREF="#top">top</A>][<A HREF="#file12">prev</A>][<A HREF="#file14">next</A>]
+<PRE>
+
+***********************************************************
+Finds the deepest observation level of Z-property
+ at each station and outputs an ascii listing of its associated X,Y values
+***********************************************************
+
+Usage:  hb_getbottom filename_root(s)  -X&lt;prop&gt; -Y&lt;prop&gt; -Z&lt;prop&gt; [-K] [-I] [-S&lt;distance_file&gt;] [-D&lt;dirname&gt;] [-E&lt;file_extent&gt;] [-h] 
+
+  List of filenames MUST be first argument or input is expected to come from stdin
+-X  : x-property: [la]t,[lo]n, [di]stance or [yr]year;
+      ex:  -Xlo
+           -X (by itself) produces a list of available properties
+-Y  : y-property:  2char mnemonic
+      ex:  -Ypr
+           -Y (by itself) produces a list of available properties
+-Z  : Z-property:  2char mnemonic
+      ex:  -Zpr
+           -Z (by itself) produces a list of available properties
+-K :  distances are in km (default is nm).
+-I :  output the station_id in first column.
+-S :  name of file containing station/distance/depth for 
+      assigning distance along track each cast.  If this option is not
+      used, distance is computed from lat/lon.  ex: -Skn104.ctd.depth 
+-D :  dirname for input files (default is current directory) 
+      ex: -D../data/ 
+-E :  input_file extent (default is no extent)
+      ex: -E.dat 
+-h :  help...... prints this message. 
+
+
+</PRE>
+<HR>
+<A NAME="file14">
+<H1>hb_getpos</H1>
+[<A HREF="#top">top</A>][<A HREF="#file13">prev</A>][<A HREF="#file15">next</A>]
+<PRE>
+
+***********************************************************
+Extracts latitude/longitude from HydroBase data files
+    and writes it to the stdout device.
+***********************************************************
+
+Usage:  hb_getpos list_of_filenames [-Ddirname] [-Eextent] [-Bminlon/maxlon/minlat/maxlat] [-:]
+ If no infiles are specified, input is expected from stdin
+    -D  : specifies directory of input files (default is ./) 
+        ex: -D../data/ 
+    -E  : specifies input_file extent (default is no extent)
+        ex: -E.dat 
+    -B  : specifies optional boundaries.
+        ex: -B-90/0/0/65 
+    -:  : outputs latitude/longitude. 
+        default is lon/lat 
+
+</PRE>
+<HR>
+<A NAME="file15">
+<H1>hb_gettrack </H1>
+[<A HREF="#top">top</A>][<A HREF="#file14">prev</A>][<A HREF="#file16">next</A>]
+<PRE>
+
+***********************************************************
+Computes course heading from pointA -&gt; pointB 
+ and positions at evenly spaced intervals along track.
+Outputs  station # (optional), lat, lon, hdg 
+***********************************************************
+
+Usage:  hb_gettrack -A[m]&lt;lat/lon&gt; -B[m]&lt;lat/lon&gt;  [-D&lt;distance&gt;] [-H] [-K] [-M] [-S&lt;start_sta&gt;] [-h]
+-A :  lat/lon of starting point. If m is specified, lat and
+         lon are each deg/mins
+-B :  lat/lon of end point. If m is specified, lat and
+         lon are each deg/mins
+
+  OPTIONS:
+-D :  distance between stations.
+-H :  output the bearing from pointA to pointB.
+-K :  distances are in km (default is nm).
+-M :  output positions in deg/mins (default is decimal degrees).
+-S :  output station # in 1st column sequentially starting with
+         station specified.  ex:  -S1-h help...... prints this message. 
+
+
+</PRE>
+<HR>
+<A NAME="file16">
+<H1>hb_grid2xyz </H1>
+[<A HREF="#top">top</A>][<A HREF="#file15">prev</A>][<A HREF="#file17">next</A>]
+<PRE>
+
+***********************************************************
+Separates a HydroBase *.grid file (output by hb_gridsurf) into individual
+*.xyz files containing lon, lat, property triplets.  Optionally smooths
+each point with information from surrounding gridpoints (radius specified
+with -R) weighted by a distance factor = .5/d, where d = # of gridpts
+away from the central node.
+
+The program outputs up to 4 files for each property specified:
+   1) property info:   lon, lat, av_value [, n]
+   2) blank gridpts:   lon, lat
+   3) stddev info  :   lon, lat, stddev [, n]
+   4) stddev blanks:   lon, lat
+Stddev information is only output if the -S option is specified.
+
+ Output files are named:     &lt;root&gt;&lt;property_id&gt;.xyz
+                             &lt;root&gt;&lt;property_id&gt;.blk
+                             &lt;root&gt;&lt;property_id&gt;_var.xyz
+                             &lt;root&gt;&lt;property_id&gt;_var.blk
+where root is supplied by the -O option and property_id is the same as
+the property_list_ids in the -P option.
+
+The -B option permits you to supply a file containing the lon,lat of
+gridpoints to be blanked.  Its purpose is to mask out bathymetry,
+coastlines, etc...  This list is checked before computing each new
+gridpoint.
+***********************************************************
+Usage:  hb_grid2xyz input_filename -O&lt;output_file_root&gt; -P&lt;property_list&gt;  [-R&lt;smoothing_radius&gt;]  [-N] [-S] [-B&lt;blanking_info_file&gt; [-h]
+
+   specify input file_name (HydroBase *.grid file 
+   output by hb_gridsurf) as first argument
+    -O  : specifies root name for output files
+          ex: -Opr200.1970_75.
+    -P  : specifies properties to project onto surface
+          Enter a list of your choices (separated by slashes)...
+     ex: -Ppr/th/sa/ox/de/ht
+         -P (by itself) will print a menu of available properties
+   [-R] : smoothing radius (# of gridpts away from central node)
+          weighting factor = .5/radius is applied
+            ex: -R0 provides no smoothing [default]
+                -R1 gives 3*gridincr smoothing, -R2 gives 5*gridincr smoothing
+   [-N] : output number of obs incorporated into each gridpt.
+   [-S] : output std dev file for each property.
+   [-B] : specifies name of file with lon/lat of pts
+          to be blanked.  This list is checked BEFORE
+          computing each new gridpoint.
+   [-h] : help -- prints this message
+
+</PRE>
+<HR>
+<A NAME="file17">
+<H1>hb_grid3d </H1>
+[<A HREF="#top">top</A>][<A HREF="#file16">prev</A>][<A HREF="#file18">next</A>]
+<PRE>
+
+***********************************************************
+Computes an average profile for each property specified
+at each lat/lon gridnode from randomly spaced stations.
+Outputs a netCDF file of hydro properties gridded as a 
+function of lat, lon, and depth.  The depth dimension 
+consists of a series of standard depths, optionally 
+specified with -Z. Averaging is done on isopycnal surfaces
+and interpolated back onto the depth levels.  The user
+must specify these density surfaces with -S&lt;pref&gt;&lt;filename&gt;.
+The sigma values should be customized to reflect the
+local vertical density stratification.
+***********************************************************
+
+Usage:  hb_grid3d filename_root(s)  -B/west/east/south/north -C&lt;cdf_output_file&gt; -I&lt;gridspacing&gt; -P&lt;list_of_properties&gt; -S&lt;ref_id&gt;/&lt;sigma_series_file&gt; [-Z&lt;std_depth_file&gt;] [-T&lt;minyr/maxyr&gt;] [-M&lt;mixed_layer_def&gt;] [-W&lt;window&gt;[/&lt;w_incr&gt;]] [-D&lt;dirname&gt;] [-E&lt;file_extent&gt;] 
+
+ -B   specifies grid bounds
+ -C   name of netCDF output file.
+ -I   specifies grid increment in degrees;  ex: -I0.5
+          OR specify separate x,y increments with a slash
+          to delimit xincr/yincr;  ex: -I2.0/0.5
+
+ -P   list of properties to project onto surface;
+          ex:  -Ppr/th/sa/ox/ht
+               -P (by itself) produces a list of available properties
+
+ -S   ref_id = 0,1, 2,3, or 4 
+          Specify EACH reference pressure with its own -S argument
+          filename = file containing sigma series definitions.
+          Each line in file contains sigmin, sigmax, incr
+          (sigmin and sigmax are INCLUSIVE in generating series).
+          Values MUST be monotonically INCREASING.
+
+ OPTIONS:
+ -D  specifies directory for input data files (default is current directory) 
+            ex: -D../data/
+ 
+ -E  specifies input_file extent (default is no extent)
+            ex: -E.dat 
+
+ -M  specify the definition of the mixed layer as 
+          sigma(sea surface) + this value.  default: 0.020000 
+          ex:  -M.02
+ -T  optional minyear/maxyear to constrain time interval of observations.
+ -W  Specifies pressure window (db) for computing 
+          gradient properties (bvfreq, pv...) This 
+          constitutes the range over which observations
+          are incorporated into the gradient computation.
+          The window is centered around each pressure 
+          level being evaluated.
+          w_incr specifies how finely to subdivide the
+          window into increments(db) to create
+          an evenly spaced pressure series over the window.
+          defaults: -W100/10
+ -Z  file containing list of standard depths.
+          Values MUST be monotonically INCREASING.
+
+ -h  help ... prints this message.
+
+</PRE>
+<HR>
+<A NAME="file18">
+<H1>hb_gridsurf2d</H1>
+[<A HREF="#top">top</A>][<A HREF="#file17">prev</A>][<A HREF="#file19">next</A>]
+<PRE>
+
+***********************************************************
+Projects a set of property values onto one or more gridded surfaces 
+specified by user. Surfaces can be any property supported by HydroBase or 
+&quot;bot&quot; to extract data at the bottom of each profile.  Input can be 
+either HydroBase station profiles or HydroBase gridded CDF files.
+***********************************************************
+
+Usage:  hb_gridsurf2d filename_root(s)  [-C] -B/west/east/south/north -I&lt;delta_x[/delta_y]&gt; -P&lt;list_of_properties&gt; [-S&lt;surface_def_file&gt;] [-W&lt;window&gt;[/&lt;w_incr&gt;]] [-D&lt;dirname&gt;] [-E&lt;file_extent&gt;] [-Z]
+
+  List of filenames MUST be first argument or 
+station data is expected from stdin.
+ -B  : specifies grid bounds
+ -I  : specifies grid increment in degrees.  ex: -I0.5
+       If x and y increments differ, separate with
+       a /       ex: -I0.5/1.0
+ -P  : list of properties to project onto surface;
+       ex:  -Ppr/th/sa/ox/ht
+            -P (by itself) produces a list of available properties
+ -S  : file containing surface definitions.
+       If this is not specified these values are expected
+       to come from the standard input device.
+
+    OPTIONS:
+[-C] : input files are cdf format files.
+       (default is HydroBase format)
+[-D] : specifies dirname for input files (default is current directory) 
+       ex: -D../data/ 
+[-E] : specifies input_file extent (default is no extent)
+            ex: -E.dat 
+[-W] : Specifies pressure window (db) for computing 
+       gradient properties {bvfreq, pv}. This 
+       constitutes the range over which observations
+       are incorporated into the gradient computation.
+       The window is centered around each pressure 
+       level being evaluated.
+       w_incr specifies how finely to subdivide the
+       window into increments(db) to create
+       an evenly spaced pressure series over the window.
+          defaults: -W100/10
+[-Z] : use deepest occurrence of surface in each profile (default is use first occurrence of surface) 
+[-h]  :  help -- prints this message.
+
+</PRE>
+<HR>
+<A NAME="file19">
+<H1>hb_layerav </H1>
+[<A HREF="#top">top</A>][<A HREF="#file18">prev</A>][<A HREF="#file20">next</A>]
+<PRE>
+
+***********************************************************
+Computes average value of properties over a pressure interval
+defined by two surfaces. Each observation contributing to the average
+is weighted by the pressure over which it was observed.
+The layer can be further limited to a pressure range using -Z&lt;zmin/zmax&gt;
+Outputs year, month, lat, lon, prop1 .. propN. 
+***********************************************************
+
+Usage:  hb_layerav filename_root(s)  -1&lt;mne[pref]/value&gt; -2&lt;mne[pref]/value[b]&gt; -P&lt;list_of_properties&gt; [-D&lt;dirname&gt;] [-E&lt;file_extent&gt;] [-I] [-L] [-M] [-T] [-Y] [-W&lt;window&gt;[/&lt;w_incr&gt;] [-Z&lt;zmin/zmax&gt;]
+
+  List of filenames MUST be first argument
+  or input is expected to come from stdin...
+    -1  : surface 1 property/value (if property = s_
+          you need to specify pref after s_
+    -2  : surface 2 property/value (if property = s_
+          you need to specify pref after s_
+          Append b to average down to the bottom if this
+          surface is deeper than the bottom.  This will
+          only occur if deepest observation is within 100m of the seafloor.
+    -P  : list of properties: ex: -Pth/sa
+          by itself, -P will list available properties
+   [-D] : specifies dirname for input files (default is current
+          directory)  ex: -D../data/ 
+   [-E] : specifies input_file extent (default is no extent)
+            ex: -E.dat 
+   [-I] : include station ID in output listing
+   [-L] : include lat/lon in output listing
+   [-M] : include month in output listing
+   [-Y] : include year in output listing
+   [-T] : include thickness of layer in output listing
+   [-W] : pressure window in db for computing gradient
+          properties (bvfreq, pv...) The window is applied
+          both above and below each observation level and
+          constitutes the range over which observations
+          are incorporated into the gradient computation.
+          The optional w_incr value specifies an interval
+          (db) into which the pressure range is subdivided
+          to create an evenly spaced pr series over the
+          window.  Default values: [50/10]
+   [-Z] : specify pressure limits for layer.
+          Exclude pressures that fall outside of these limits from weighted average.
+   [-h] : help... prints this message.
+
+</PRE>
+<HR>
+<A NAME="file20">
+<H1>hb_layerinteg </H1>
+[<A HREF="#top">top</A>][<A HREF="#file19">prev</A>][<A HREF="#file21">next</A>]
+<PRE>
+
+***********************************************************
+Integrates a property over a layer specified by two surfaces
+The property is weighted in the vertical by rho * dz.
+The layer can be further limited to a pressure range using -Z&lt;zmin/zmax&gt;
+For each station, outputs a line containing some combination of year, month, lat, lon, station_id  plus avg_prop, avg_rho, layer_thickness, distance_between_stations, avg_prop*avg_rho*layer_thickness*distance, cumulative_sum
+***********************************************************
+ 
+
+Usage:  hb_layerinteg filename_root(s)  -1&lt;mne[pref]/value&gt; -2&lt;mne[pref]/value[b]&gt; -P&lt;list_of_properties&gt; [-A&lt;startlat/lon&gt;] [-B&lt;minlon/maxlon/minlat/maxlat&gt;] [-D&lt;dirname&gt;] [-E&lt;file_extent&gt;] [-I] [-W&lt;window&gt;[/&lt;w_incr&gt;] [-Z&lt;zmin/zmax&gt;]
+
+  List of filenames MUST be first argument
+  or input is expected to come from stdin...
+    -1  : surface 1 property/value (if property = s_
+          you need to specify pref after s_
+    -2  : surface 2 property/value (if property = s_
+          you need to specify pref after s_
+          Append b to to integrate to the bottom if this surface
+          is deeper than the bottom.  This will only occur if the
+          deepest observation is within 100 meters of the seafloor depth.
+    -P  : property to integrate (only one allowed): ex: -Psa
+          by itself, -P will list available properties
+   [-A] : specify starting position (lat/lon) and output distance between stations
+          The stations will be sorted by increasing distance from this point.
+          If no starting point is specified, the stations will not be sorted
+         but will be taken in the order they appear in the file.
+   [-B] : specify geographic bounds.  Stations that do not 
+          fall within bounds will not be included in the output. 
+            ex: -B-75/-10/20/30 
+   [-D] : specifies dirname for input files (default is current
+          directory)  ex: -D../data/ 
+   [-E] : specifies input_file extent (default is no extent)
+            ex: -E.dat 
+   [-I] : specify an identifier (char string) to be output (e.g. year, lat, lon
+            Be sure to enclose in double quotes if string contains white space
+            ex: -I1999  or -I24   or -IKN164  
+   [-W] : pressure window in db for computing gradient
+          properties (bvfreq, pv...) The window is applied
+          both above and below each observation level and
+          constitutes the range over which observations
+          are incorporated into the gradient computation.
+          The optional w_incr value specifies an interval
+          (db) into which the pressure range is subdivided
+          to create an evenly spaced pr series over the
+          window.  Default values: [50/10]
+   [-Z] : specify pressure limits for layer.
+          Exclude pressures that fall outside of these limits from weighted average.
+   [-h] : help... prints this message.
+
+</PRE>
+<HR>
+<A NAME="file21">
+<H1>hb_msq10bounds </H1>
+[<A HREF="#top">top</A>][<A HREF="#file20">prev</A>][<A HREF="#file22">next</A>]
+<PRE>
+
+***********************************************************
+ Accepts a 10-deg MSq and (optional) increment as arguments and
+returns bounds in the proper format: w/e/s/n  .  Specifying
+an increment will enlarge the bounds by half the increment
+-- useful to generate node-grids as opposed to pixel-grids.
+***********************************************************
+
+Usage:  hb_msq10bounds msq_10 [-I&lt;incr&gt; 
+
+ msq_10 is the 4-digit WMO Square.
+ 
+  OPTIONS:
+[-I]  : specifies grid increment.
+        Bounds will be offset by half the increment.
+[-h]  : help -- prints this message.
+
+</PRE>
+<HR>
+<A NAME="file22">
+<H1>hb_mssort </H1>
+[<A HREF="#top">top</A>][<A HREF="#file21">prev</A>][<A HREF="#file23">next</A>]
+<PRE>
+
+hb_mssort sorts file(s) of HydroBase stations by geographic squares.
+The size of square is specified by the -S parameter.
+Up to MAXF files can be simultaneously opened.
+Any stations that do not fit into an open file
+are stored in a file called msextra.dat -- which can be
+sorted subsequently. An accounting of numbers of stations 
+in each file is written to stdout.
+
+Usage:  hb_mssort list_of_filename_root(s) -S&lt;size&gt; [-Ddir] [-Eextent][-Ooutpath] [-Nnew_extent] [-A] [-T] &gt; logfile
+
+    -S  : size of geographic squares for sorting 
+        options: 1 = 1 deg square 
+                 2 = 2.5 deg  
+                 5 = 5 deg  
+                10 = 10 deg      ex: -S10 
+   [-D] : specifies directory of input files (default is ./) 
+        ex: -D../data/ 
+   [-E] : specifies input file extent (default is no extent)
+        ex: -E.dat 
+   [-O] : specifies directory of output files (default is ./) 
+        ex: -O../natl/ 
+   [-N] : specifies output file extent (default is no extent)
+        ex: -N.dat 
+   [-A] : append to existing files (default is do not alter an existing file.)
+   [-T] : truncate existing files (default is do not alter an existing file.)
+   [-h] : help... prints this message.)
+
+</PRE>
+<HR>
+<A NAME="file23">
+<H1>hb_propcalc </H1>
+[<A HREF="#top">top</A>][<A HREF="#file22">prev</A>][<A HREF="#file24">next</A>]
+<PRE>
+
+***********************************************************
+ Computes properties at each pressure level
+ in a station and outputs a HydroBase format
+ station file containing all the properties specified
+ with the -P option.
+***************************************************
+Usage:  hb_propcalc filename_root(s)  -P&lt;list_of_properties&gt;   [-W&lt;window&gt;[/&lt;w_incr&gt;]] [-D&lt;dirname&gt;] [-E&lt;file_extent&gt;]
+
+  List of filename (roots) must be first arguments
+-P : properties to list out;
+          ex:  -Ppr/th/sa/ox/ht
+               -P (by itself) produces a list of available properties
+
+   OPTIONS: 
+-W : Specifies pressure window (db) for computing 
+          gradient properties (bvfreq, pv...) This 
+          constitutes the range over which observations
+          are incorporated into the gradient computation.
+          The window is centered around each pressure 
+          level being evaluated.
+          w_incr specifies how finely to subdivide the
+          window into increments(db) to create
+          an evenly spaced pressure series over the window.
+          defaults: -W100/10 
+-D : specifies directory input files (default is current directory) 
+            ex: -D../data/ 
+-E : specifies input_file extent (default is no extent)
+            ex: -E.dat 
+-h help...... prints this message.
+
+</PRE>
+<HR>
+<A NAME="file24">
+<H1>hb_rangechk_ts </H1>
+[<A HREF="#top">top</A>][<A HREF="#file23">prev</A>][<A HREF="#file25">next</A>]
+<PRE>
+hb_rangechk_ts 
+Checks T and S values against ranges specified in rangefile.  Bad scans are put into a badfile, acceptable scans are output to outfile.
+Usage:  hb_rangechk_ts list_of_infile(s) -B&lt;badfile&gt; -R&lt;rangefile&gt; -O&lt;outfile&gt; [-Llogfile] [-h] 
+ List of infiles should be first argument(s) 
+   -R  : specifies file containing min/max values for acceptable depth, theta, salt 
+        ex: -R7102.ranges 
+   -B  : specifies output file for bad scans.
+        ex: -I7102.rbad 
+   -O  : specifies output file for good scans.  
+        ex: -O7102.rchk 
+   -D  : specifies dir for input files (default is ./) 
+        ex: -D../data/ 
+   -E  : specifies file extent for input files (default is no extent)
+        ex: -E.dat 
+  [-L] : specifies file to which log info is written 
+        ex: -L7102.rchklog 
+  [-h] : help -- prints this message. 
+
+</PRE>
+<HR>
+<A NAME="file26">
+<H1>hb_section </H1>
+[<A HREF="#top">top</A>][<A HREF="#file25">prev</A>][<A HREF="#file27">next</A>]
+<PRE>
+***********************************************************
+Computes properties at each pressure level in a station and outputs
+an ascii listing of each observed level containing all
+properties specified with the -X -Y and -Z options.
+***********************************************************
+
+USAGE:  hb_section filename(_roots) -X&lt;prop&gt; -Y&lt;prop&gt; -Z&lt;prop&gt; [-D&lt;dirname&gt;] [-E&lt;file_extent&gt;] [-K] [-S&lt;sta_dist_file&gt;] [-W&lt;window&gt;[/&lt;w_incr&gt;] 
+
+  List of filenames MUST be first argument or input is expected to come from stdin
+-X : x-property: [la]t,[lo]n, or [di]stance;
+          ex:  -Xlo
+               -X (by itself) produces a list of available properties
+-Y : y-property:  2char mnemonic
+          ex:  -Ypr
+               -Y (by itself) produces a list of available properties
+-Z : Z-property:  2char mnemonic
+          ex:  -Zpr
+               -Z (by itself) produces a list of available properties
+
+   OPTIONS: 
+-D : specifies dirname for input files (default is current directory) 
+            ex: -D../data/ 
+-E : specifies input_file extent (default is no extent)
+            ex: -E.dat 
+-F : force longitudes to be 0 - 360 for crossing the dateline (default is -180 to 180).
+-K : distances are in km (default is nm).
+-S : specifies name of file containing station/distance/depth for 
+     assigning distance along track for each cast.  If this option is not
+     used, distance is computed from lat/lon.  ex: -Skn104.ctd.depth 
+-W : Specifies pressure window (db) for computing 
+     gradient properties (buoyancy frequency, pot vorticity...)
+     This constitutes the range over which observations
+     are incorporated into the gradient computation
+     and acts as a low pass filter on the output profile.
+     The window is centered around each pressure level being evaluated.
+     w_incr specifies how finely to subdivide the
+     window into increments(db) to create
+     an evenly spaced pressure series over the window.
+     defaults: -W100/10 
+-h : help...... prints this message. 
+
+
+</PRE>
+<HR>
+<A NAME="file27">
+<H1>hb_siftlevs </H1>
+[<A HREF="#top">top</A>][<A HREF="#file26">prev</A>][<A HREF="#file28">next</A>]
+<PRE>
+
+***********************************************************
+Determines whether an observation level has a value of
+a property which falls between the specified min/max
+ranges.  If so, it prints the scans to stdout in HydroBase station format.  Scans that do not meet the criteria are written to the file specified by -O
+***********************************************************
+
+Usage:  hb_siftlevs filename_root(s)  -P&lt;property/min/max&gt;  [-O&lt;outcast_file&gt;]] [-W&lt;window&gt;[/&lt;w_incr&gt;]][-Z&lt;zmin&gt;/&lt;zmax&gt;] [-S&lt;sigmin&gt;/&lt;sigmax&gt;] [-T&lt;tmin&gt;/&lt;tmax&gt;] [-D&lt;dirname&gt;] [-E&lt;file_extent&gt;] [-h]
+
+  List of filenames MUST be first argument!
+-P : property mnemonic/min/max;
+     ex:  -Psa/0/30
+          -P (by itself) produces a list of available    properties
+
+   OPTIONS: 
+-D : specifies dirname for input files (default is current directory) 
+     ex: -D../data/ 
+-E : specifies input_file extent (default is no extent)
+     ex: -E.dat 
+-O : filename for stations which do NOT meet criteria;
+-S : Optional sigma-0 limits min/max to search;
+     ex:  -S27/27.8
+-T : Optional theta limits min/max to search;
+     ex:  -T3/4
+-Z : Optional pressure limits min/max to search;
+     ex:  -Z0/1000
+-W : Specifies pressure window (db) for computing 
+     gradient properties (bvfreq, pv...) This 
+     constitutes the range over which observations
+     are incorporated into the gradient computation.
+     The window is centered around each pressure 
+     level being evaluated.
+     w_incr specifies how finely to subdivide the
+     window into increments(db) to create
+     an evenly spaced pressure series over the window.
+     defaults: -W100/10
+-h : help...... prints this message. 
+
+
+</PRE>
+<HR>
+<A NAME="file28">
+<H1>hb_siftsta </H1>
+[<A HREF="#top">top</A>][<A HREF="#file27">prev</A>][<A HREF="#file29">next</A>]
+<PRE>
+
+***********************************************************
+Determines whether a station has a value of
+a property which falls between specified minima/maxima.
+If so, it prints the station to stdout.
+***********************************************************
+
+Usage:  hb_siftsta filename_root(s)  -P&lt;property/min/max&gt;  [-D&lt;dirname&gt;] [-E&lt;file_extent&gt;] [-O&lt;outcast_file&gt;]] [-W&lt;window&gt;[/&lt;w_incr&gt;]][-Z&lt;zmin&gt;/&lt;zmax&gt;] [-S&lt;sigmin&gt;/&lt;sigmax&gt;] [-T&lt;tmin&gt;/&lt;tmax&gt;] [-h]
+
+  List of filenames MUST be first argument!
+-P : property mnemonic/min/max;
+          ex:  -Psa/0/30
+               -P (by itself) produces a list of available    properties
+
+   OPTIONS: 
+-D : specifies dirname for input files (default is current directory) 
+            ex: -D../data/ 
+-E : specifies input_file extent (default is no extent)
+            ex: -E.dat 
+-O  : filename for stations which do NOT meet criteria;
+-S : Optional sigma-0 limits min/max to search;
+          ex:  -S27/27.8
+-T : Optional theta limits min/max to search;
+          ex:  -T3/4
+-Z : Optional pressure limits min/max to search;
+          ex:  -Z0/1000
+-W : Specifies pressure window (db) for computing 
+          gradient properties (bvfreq, pv...) This 
+          constitutes the range over which observations
+          are incorporated into the gradient computation.
+          The window is centered around each pressure 
+          level being evaluated.
+          w_incr specifies how finely to subdivide the
+          window into increments(db) to create
+          an evenly spaced pressure series over the window.
+          defaults: -W100/10
+-h :  help...... prints this message. 
+
+
+</PRE>
+<HR>
+<A NAME="file29">
+<H1>hb_sigma024_eval </H1>
+[<A HREF="#top">top</A>][<A HREF="#file28">prev</A>][<A HREF="#file30">next</A>]
+<PRE>
+
+***********************************************************
+Evaluates the min, max, mean, and delta values of potential density at predefined pressure levels.
+***********************************************************
+
+Usage:  hb_sigma024_eval filename_root(s) [-D&lt;dirname&gt;] [-E&lt;file_extent&gt;] [-h] 
+
+  List of filenames MUST be first argument!
+
+   OPTIONS: 
+ -D  : specifies dirname for input files (default is current directory) 
+        ex: -D../data/ 
+ -E  : specifies input_file extent (default is no extent)
+         ex: -E.dat 
+-h :  help...... prints this message.
+
+</PRE>
+<HR>
+<A NAME="file30">
+<H1>hb_sigma_eval </H1>
+[<A HREF="#top">top</A>][<A HREF="#file29">prev</A>][<A HREF="#file31">next</A>]
+<PRE>
+***********************************************************
+Evaluates the min, max, mean, and delta values of potential density (s0 s1 s2 s3 s4) for a set of appropriate pressure ranges.
+***********************************************************
+
+Usage:  hb_sigma_eval filename_root(s) [-D&lt;dirname&gt;] [-E&lt;file_extent&gt;] [-h] 
+
+  List of filenames MUST be first argument!
+
+   OPTIONS: 
+-D : specifies dirname for input files (default is current directory) 
+        ex: -D../data/ 
+-E : specifies input_file extent (default is no extent)
+        ex: -E.dat 
+-h :  help...... prints this message. 
+
+</PRE>
+<HR>
+<A NAME="file31">
+<H1>hb_sigma 31/57</H1>
+[<A HREF="#top">top</A>][<A HREF="#file30">prev</A>][<A HREF="#file32">next</A>]
+<PRE>
+hb_sigma
+
+Computes potential density rel to pref from
+specified values of pressure, pot.temp, and salt
+
+Usage:  hb_sigma  p  theta  s  pref
+
+</PRE>
+<HR>
+<A NAME="file32">
+<H1>hb_slice </H1>
+[<A HREF="#top">top</A>][<A HREF="#file31">prev</A>][<A HREF="#file33">next</A>]
+<PRE>
+***********************************************************
+For a list of positions (lon/lat pairs) and set of HydroBase gridded 
+    cdf files, produces a HydroBase station file containing &quot;stations&quot; 
+    that lie along the line connecting the positions.  In essence the
+    positions define a pathway along which a vertical slice is cut
+    through the 3D gridded property fields.
+***********************************************************
+    
+Usage:  hb_slice cdf_file(s) -I&lt;delta_x[/delta_y]&gt;  -P&lt;list_of_properties&gt; [-O&lt;outfile&gt;] [-G] [-L&lt;position_file&gt;] [-D&lt;dirname&gt;] [-E&lt;file_extent&gt;] -W&lt;window&gt;[/&lt;w_incr&gt;]] 
+
+  List of filenames must be first argument 
+ -I  : xgrid[/ygrid] increment in degrees.  
+ -P  : list of properties for output;
+       ex:  -Ppr/th/sa/ox/ht
+            -P (by itself) produces a list of available properties
+
+   OPTIONS:  
+[-D] : directory for input cdf files  
+            ex: -D../data/ 
+[-E] : file extent for input cdf files
+            ex: -E.dat 
+[-G] : Gridnodes fall on whole degrees in cdf files
+       default is gridlines offset by 0.5 * gridinc (pixel registration)
+[-L] : file containing list of lon/lat positions.
+       If not specified, this list will be read from stdin 
+[-O] : name of output file
+[-W] : Specifies pressure window (db) for computing 
+       gradient properties (bvfreq, pv...) This 
+       constitutes the range over which observations
+       are incorporated into the gradient computation.
+       The window is centered around each pressure 
+       level being evaluated.
+       w_incr specifies how finely to subdivide the
+       window into increments(db) to create
+       an evenly spaced pressure series over the window.
+       defaults: -W100/10
+[-h] : help -- prints this message.
+
+</PRE>
+<HR>
+<A NAME="file33">
+<H1>hb_smooth2d </H1>
+[<A HREF="#top">top</A>][<A HREF="#file32">prev</A>][<A HREF="#file34">next</A>]
+<PRE>
+***********************************************************
+ An iterative 5-pt Laplacian filter for 2-D gridded data.
+***********************************************************
+
+USAGE: hb_smooth2d [xyzfile(s)] -B&lt;xmin/xmax/ymin/ymax&gt; -I&lt;dx&gt;[/&lt;dy&gt;] [-O&lt;output_file&gt;] [-E&lt;empty&gt;/&lt;mask_val&gt;] [-G]   [-M&lt;mask_file&gt; ] [-N&lt;new_mask_file&gt; ] [-O&lt;output_file&gt;]  [-S&lt;#_smoothing_iterations&gt; ] [-W&lt;weight&gt;]  [-:] [-h]
+
+-B   sets the grid bounds in user units: xmin/xmax/ymin/ymax.
+-I   sets the grid spacing for the x/y directions.
+
+	OPTIONS:
+-E  Explicity write out nodes that are empty or masked.
+       Without -E, only non-empty, non-masked gridnodes are written out.
+       Optionally use NaN for empty nodes instead of [-9.000e+34] 
+       and/or for masked nodes instead of [9.000e+34]
+       Specify -Enan  for empty nodes
+               -E/nan  for masked nodes
+               -Enan/nan for both empty and masked.
+-G  force gridnode registration (default is pixel registration).
+-M name of file containing masking info.
+      Each line of file may specify individual points to mask
+      or multiple polygons separated by a '&gt;' character. 
+      Specify 'I' or 'O' immediately after the '&gt;' character
+      to mask INSIDE or OUTSIDE of polygon.
+      No '&gt;' or a 'C' immediately after the '&gt;'  
+      signifies cell mode masking.  In this mode
+      an {x,y} pair OR {x,y,mask} triplet is given.
+      The &lt;mask&gt; value can be 1 to mask the point
+      or 0 (zero) to unmask the point.
+-N name of new file for x,y pairs of empty or masked gridnodes after smoothing.
+-O  name of output file  (default is stdout).
+-S #of iterations for smoothing
+      Default is [-S3]
+-W weighting factor. Default:[0.25]
+-: input data are ordered y x z  
+       [default order is x y z]   
+-h help....prints this message.  
+</PRE>
+<HR>
+<A NAME="file34">
+<H1>hb_smooth3d </H1>
+[<A HREF="#top">top</A>][<A HREF="#file33">prev</A>][<A HREF="#file35">next</A>]
+<PRE>
+***********************************************************
+Uses a 5-point Laplacian filter to smooth each
+point in HydroBase cdf files along isopycnals.  
+Multiple cdf files can be input, but all
+must possess the same depth dimensions, and x- y-
+grid increments.  The output cdf file will have the
+same depth dimension, but the lat/lon dimensions specified
+with -B&lt;w/e/s/n&gt; and -I&lt;x/yincr&gt;  
+The input domain is expanded relative to the output
+so that data beyond the borders of the grid can be
+incorporated into the smoothing (amount of expansion
+depends on smoothing radius [-S])
+Computation speed is proportional to the square of
+the smoothing radius.  Using a small radius and large
+weight (such as -S3 -W0.75) is more efficient than a large
+radius/small weight (e.g. -S10 -W0.25) although the results
+are approximately comparable.
+The properties  pr, te, sa  are mandatory 
+in both input and output files -- regardless
+of whether they are specified in the -P argument.
+***********************************************************
+
+USAGE:  hb_smooth3d cdf_file(s) -B&lt;w/e/s/n&gt; -I&lt;x_inc&gt;[/&lt;y_inc&gt;] -O&lt;outfile&gt; -P&lt;properties&gt; [-D&lt;input_dir&gt;] [-E&lt;input_file_extent&gt;] [-G] [-S&lt;smoothing_radius&gt;] [-W&lt;weight&gt;] [-Z[b][&lt;zmin/zmax&gt;]] [-h] [-:]
+
+ -B  sets the output grid bounds w/e/s/n.
+ -I  sets the output grid spacing for x/y dimensions.
+ -O  name of output cdf file.
+ -P  list of properties to include in output file
+        ex:  -Ppr/th/sa/ox/ht
+       -P (by itself) produces a list of available properties.
+
+	OPTIONS:
+-D directory for input cdf files.
+-E file extent for input cdf files.
+-G force gridnode registration for output(default is pixel registration).
+-S Smoothing radius = # of iterations of Laplacian filter
+      Default is [-S3]
+-W weighting factor: the central node is given weight = 1.0    and surrounding nodes are weighted by this factor.   Default:[0.50]
+-Z  zmin/zmax values limits smoothing to levels
+   between those depths. 
+   'b' switches on option to smooth the bottom layer. 
+   ex: -Zb0/1500 smoothes depth levels 0-&gt;1500 meters plus
+            the bottom layer. 
+       -Z1500/3000 smooths just 1500-&gt;3000 m leaving  
+           others --including bottom level--unaltered. 
+       -Zb smooths just the bottom.  
+   Default (no -Z argument): smooth all levels including bottom layer.
+-h help...... prints this message. 
+</PRE>
+<HR>
+<A NAME="file35">
+<H1>hb_statchk_ts </H1>
+[<A HREF="#top">top</A>][<A HREF="#file34">prev</A>][<A HREF="#file36">next</A>]
+<PRE>
+***********************************************************
+Examines each data point in a file and eliminates points which are 
+statistically distant from the t-s relation defined for the bin.  
+Linear theta-s plus a standard error of estimate are computed 
+for density (sigma) bins by the program hb_statfit_ts.  These coefficients  
+determine an acceptable range of values in each bin  -- n standard 
+errors from the line.  If a t-s point falls outside this range, the entire
+scan is eliminated (because a scan must have both to place it in a density 
+bin). A point falling in no density bin or in a density bin containing less 
+than 3 pts is eliminated.  A station bearing &gt;10 (or &gt;50%) bad scans is 
+completely eliminated.   The 
+number of eliminated points is tallied as a percentage of the total number 
+of scans and written to the logfile (or stdout).
+***********************************************************
+
+Usage:  hb_statchk_ts -Iinfile -Ooutfile -Sstatfile [-Bbad_file] [-Ddeep_statfile]  [-N#stderr_ts] [-M#stderr_surf/rho_max] [-Qpercent] [-Llogfile] [-Pfile_rootname] 
+   -I  : specifies input HydroBase file
+        ex: -I7102_0.raw 
+   -O  : specifies output file  
+        ex: -O7102_0.st1 
+   -S  : specifies file with statistics for each sigma bin.
+        ex: -S7102_0.tsfit 
+  [-B] : specifies file to which bad data will be written  
+        ex: -O7102_0.bad 
+  [-D] : specifies file in which statistics for sigma bins deeper than 
+         1000m are defined.
+        ex: -D7102.statfit 
+  [-N] : # of standard errors to define good data.
+        ex: -N2.3 
+  [-M] : # of standard errors for surface waters defining
+         good data and the density boundary (sigma0) to
+         which this # of std errors is applied.
+        ex: -N5/26.6 
+  [-P] : enables plotfile option and specifies root name
+         of files to which _ts.dat will be appended.
+        ex: -P7102_0
+  [-Q] : quota (in percent) of obs that can be bad
+         before declaring entire station bad. 
+         default is 0.650000 
+
+</PRE>
+<HR>
+<A NAME="file36">
+<H1>hb_statfit_ts </H1>
+[<A HREF="#top">top</A>][<A HREF="#file35">prev</A>][<A HREF="#file37">next</A>]
+<PRE>
+***********************************************************
+Computes linear fits to the t,s data for each sigma bin specified  
+in the sigbin file.  The theta-salt curve is approximated by connecting
+the mean t,s point in each density bin.  The line tangent to this curve
+at the mean t,s point then approximates the t-s relation in each bin. 
+We determine the slope, y-intercept, and standard error for each bin.
+Initially, we assume theta as the independent variable. If the slope of
+the linear fit exceeds a critical value (maxslope), we designate salt
+as the independent variable and compute the statistics for theta = F(salt)
+and oxygen = F(salt).  This helps to identify situations where the 
+F(theta) fit for a particular density bin does not approximate the 
+overall t-s relationship.
+The output file contains 1 header line followed by a line for each density
+bin:
+    number of bins
+    bin #, T or S,  slope, intercept, error, n  
+***********************************************************
+
+Usage:  hb_statfit_ts list_of_filenames -Ooutfile -Ssigma_binfile [-Ddirname] [-Eextent] [-Mmaxslope] [-Xminpts] [-Pplotfile] 
+   -O  : specifies output file  
+          ex: -O7102.ts_fit 
+   -S  : specifies file in which sigma bins are defined.
+          ex: -Ssigbins.natl 
+  [-D] : specifies directory of input files (default is ./) 
+        ex: -D../data/ 
+  [-E]  : specifies input_file extent (default is no extent)
+  [-M] : maximum slope (delta-s/delta-t) for which theta
+         will be used as x variable in linear fit
+  [-X] : min # of points in density bin to keep data
+         (default = 3)
+          ex: -X3 
+  [-P] : turns on plotfile option and specifies fileroot 
+          to which will be appended mean.ts and slope.ts
+          ex: -P7207
+
+</PRE>
+<HR>
+<A NAME="file37">
+<H1>hb_stationsort </H1>
+[<A HREF="#top">top</A>][<A HREF="#file36">prev</A>][<A HREF="#file38">next</A>]
+<PRE>
+***********************************************************
+Sorts HydroBase station files into individual station files.
+***********************************************************
+
+Usage:  hb_stationsort list_of_input_files -[N]new_file_root_name [-Ooutpath] [-T] [-D&lt;dir&gt;] [-E&lt;extent&gt;]
+
+Infile_list must be first arguments or else input is expected from stdin
+   [-N] : optionally specifies output file root 
+        to which will be appended a number reflecting 
+        the ordinal position of that station. 
+        ex: with -Npan1964  
+        stations will be named pan1964.0001, pan1964.0002, etc 
+        Without this option (the default)files are
+        named by countrycode, ship, cruise, and station
+   [-D] : specifies directory of input files (default is ./) 
+        ex: -D../data/ 
+   [-E] : specifies input_file extent (default is no extent)
+        ex: -E.dat 
+   [-O] : specifies directory of output files (default is ./) 
+        ex: -O../natl/ 
+   [-T] : truncate existing files (default is do not clobber an existing file.)
+
+</PRE>
+<HR>
+<A NAME="file38">
+<H1>hb_stats1d </H1>
+[<A HREF="#top">top</A>][<A HREF="#file37">prev</A>][<A HREF="#file39">next</A>]
+<PRE>
+***********************************************************
+Reads x-y pairs and computes mean and standard deviation
+of y for the x binned according to min/max/increment 
+specified with the -R argument. Input and output files can be
+specified -- or the stdin and stdout devices will be used
+***********************************************************
+
+Usage:  hb_stats1d input_file_list [-O&lt;output_file&gt;]  -R&lt;min/max/incr&gt; 
+ [-O] : specifies optional output file
+        default is stdout 
+  -R  : specify minimum/maximum/[delta] to create x bins. 
+        ex: -R1920/1995/5    default delta is 1 
+
+</PRE>
+<HR>
+<A NAME="file39">
+<H1>hb_surfdiff </H1>
+[<A HREF="#top">top</A>][<A HREF="#file38">prev</A>][<A HREF="#file40">next</A>]
+<PRE>
+***********************************************************
+Reads 2 files of gridded xyz values, and subtracts the values 
+in the second file from the first for gridpoints where both contain
+information and writes them out to the stdout device.
+***********************************************************
+
+Usage:  hb_surfdiff file1 file2 -Bwest/east/south/north -Ideltax/deltay  &gt; output_file
+  -B   specifies grid bounds. Ex: -B-80/0/0/65
+  -I   specifies grid increments. Ex: -I1/.5
+ [-:]  order of first 2 columns is lat/lon (default is lon/lat)
+
+</PRE>
+<HR>
+<A NAME="file40">
+<H1>hb_surf </H1>
+[<A HREF="#top">top</A>][<A HREF="#file39">prev</A>][<A HREF="#file41">next</A>]
+<PRE>
+
+***********************************************************
+Projects hydrographic properties onto one or more surfaces
+and outputs the values of those properties (not gridded) together with
+some combination of year, month, lat, and lon for each profile in a HydroBase station file.
+Surfaces may be defined by some value of any property supported
+(e.g. depth, pressure, temperature, density, etc.)
+***********************************************************
+
+Usage:  hb_surf filename_root(s) -P&lt;list_of_properties&gt; [-B/west/east/south/north] [-S&lt;surface_def_file&gt;] [-W&lt;window&gt;[/&lt;w_incr&gt;]] [-D&lt;dirname&gt;] [-E&lt;file_extent&gt;] [-Y] [-M] [-L] [-I]
+
+List of filenames MUST be first argument.
+  If no files are named, station data expected from stdin.
+   -P  list of properties to project onto surface;
+          ex:  -Ppr/th/sa/ox/ht
+               -P (by itself) produces a list of available properties
+   OPTIONS:
+   -B  specifies grid bounds: w/e/s/n
+   -D  specifies dirname for input files (default is current directory) 
+            ex: -D../data/ 
+   -E  specifies input_file extent (default is no extent)
+            ex: -E.dat 
+   -I  include station ID in output listing
+   -L  include lat/lon in output listing
+   -M  include month in output listing
+   -Y  include year in output listing
+   -S  file containing surface definitions.
+       If this is not specified these values are expected
+       to come from the standard input device.  This file
+       must be specified if station data are input via stdin.
+   -W  Specifies pressure window (db) for computing 
+       gradient properties (bvfreq, pv...) This 
+       constitutes the range over which observations
+       are incorporated into the gradient computation.
+       The window is centered around each pressure 
+       level being evaluated.
+       w_incr specifies how finely to subdivide the
+       window into increments(db) to create
+       an evenly spaced pressure series over the window.
+          defaults: -W100/10 
+   -h  help (prints this message)
+
+</PRE>
+<HR>
+<A NAME="file41">
+<H1>hb_theta </H1>
+[<A HREF="#top">top</A>][<A HREF="#file40">prev</A>][<A HREF="#file42">next</A>]
+<PRE>
+***********************************************************
+Computes potential temperature from specified
+values of pressure, in situ temp, and salt
+***********************************************************
+
+Usage:  hb_theta  p  t  s  
+
+</PRE>
+<HR>
+<A NAME="file42">
+<H1>hb_topo2xyz </H1>
+[<A HREF="#top">top</A>][<A HREF="#file41">prev</A>][<A HREF="#file43">next</A>]
+<PRE>
+
+***********************************************************
+Reads gridded bathymetry values from a binary
+topography file  /usr/local/hydrobase/lib/topo.onetenthdeg.swap.dat
+An alternate file can be specified with -T and its
+grid increment with -I.  Use -B to specify the
+bounds of the output area.
+Lon/lat/z values are written to outfile or stdout.
+***********************************************************
+
+Usage:  hb_topo2xyz  [-T&lt;input_global_topo_file&gt;] [-B&lt;w/e/s/n&gt;] [-I&lt;xincr[/yincr]&gt;] [-N] [-O&lt;outfile&gt;]
+
+   OPTIONS:
+[-B] : specifies output bounds, if not 0/360/-90/90
+[-I] : specify grid increments of input topo file. 
+        ex: -I.1/.5    Default increment is [0.10/0.10]
+[-N] : do NOT multiply bathymetry by -1 to get positive seafloor. 
+          [default is to multiply by -1] 
+[-O] : output file. If not specified output goes to stdout
+[-T] : specify name of binary topography file. Default[/usr/local/hydrobase/lib/topo.onetenthdeg.swap.dat]
+[-h] : help -- prints this message.
+
+</PRE>
+<HR>
+<A NAME="file43">
+<H1>hb_toposlice </H1>
+[<A HREF="#top">top</A>][<A HREF="#file42">prev</A>][<A HREF="#file44">next</A>]
+<PRE>
+***********************************************************
+Outputs bathymetry along a pathway specified
+as a list of lon/lat positions. The default bathymetry database
+is /usr/local/hydrobase/lib/topo.onetenthdeg.swap.dat 
+An alternative file may be specified with the -T option. 
+If the input grid spacing is other than 0.10, specify grid increment
+with -I.  Pathway must be a minimum of 2 points, but can be
+multiple points. -L specifies filename containing these points.
+If no posfile is specified, the points are expected from stdin.
+Lon/lat/z values are written to outfile or stdout.
+ -D causes the distance along the pathway to be written
+out as a fourth column.
+To generate an xy mask file for use with hb_fitsection,
+specify -M&lt;xval&gt; where xval is 1, 2, or 3 (lon, lat or distance)
+***********************************************************
+
+Usage:  hb_toposlice  [-T&lt;global_topo_file&gt;] [-I&lt;xincr[/yincr]&gt;][-D[k]] [-L&lt;posfile&gt;] [-M&lt;xval&gt;] [-N] [-O&lt;outfile&gt;]
+
+   OPTIONS:
+[-D] : include distance (nautical miles) in output. 
+       Append k for distance in km [-Dk]. 
+[-I] : specify grid increments of input topo file. 
+        ex: -I.1/.5   Default increment is  [0.10/0.10]
+[-L] : position file contains lon/lat pairs (one per line) to define pathway
+[-M] : outputs xy values for use as a mask file with hb_fitsection.
+       specify xval = 1 for longitude
+                    = 2 for latitude
+                    = 3 for distance
+       Info is added at beginning and end for polygon masking mode.
+[-N] : make seafloor values negative. 
+          [default is seafloor positive] 
+[-O] : output file. If not specified output stdout
+[-T] : specify name of binary topography file. Default[/usr/local/hydrobase/lib/topo.onetenthdeg.swap.dat]
+[-h] : help -- prints this message.
+
+</PRE>
+<HR>
+<A NAME="file44">
+<H1>hb_tssig </H1>
+[<A HREF="#top">top</A>][<A HREF="#file43">prev</A>][<A HREF="#file45">next</A>]
+<PRE>
+***********************************************************
+.  Computes a matrix of sigma values  for specified salinity 
+.  and theta ranges.  Useful for generating density contours in
+.  T-S plots. Sigma is computed from specific
+.   volume anomaly based on 1980 equation of state (Millero, et al., 1980).
+***********************************************************
+
+USAGE:  hb_tssig pref smin smax sincr th_min th_max th_incr &gt; outfile
+</PRE>
+<HR>
+<A NAME="file45">
+<H1>hb_updatehdr </H1>
+[<A HREF="#top">top</A>][<A HREF="#file44">prev</A>][<A HREF="#file46">next</A>]
+<PRE>
+hb_updatehdr
+.  Reads stations and applies changes to header 
+
+Usage:  hb_updatehdr filename_root(s) [-Ddirname] [-Eextent] [-Mmonth] [-Ccruise] [-Sship] [-Nnation] [-Yyear] [-W][-Iinstrument_code] [-Oorigin_code] [-Qquality_mask]  
+
+    -D  : specifies dirname (default is ./) 
+        ex: -D../data/ 
+    -E  : specifies file extent (default is no extent)
+        ex: -E.dat 
+    -W  : update WMO square designation
+    -M  : update month
+    -C  : update cruise #
+    -S  : update ship code
+    -N  : update country code
+    -Y  : update year
+    -I  : update instrument type: (b,c,f,s,m, or u
+    -O  : update origination code: ('0' .. '9')
+    -Q  : update quality code with a 4-byte mask
+          ex: -Q1000  :  a bitwise OR of this mask is applied to each station's quality bytes.
+    -h  : help -- prints this message
+
+</PRE>
+<HR>
+<A NAME="file46">
+<H1>hb_update_pdr</H1>
+[<A HREF="#top">top</A>][<A HREF="#file45">prev</A>][<A HREF="#file47">next</A>]
+<PRE>
+
+***********************************************************
+Fills in missing pdr fields for HydroBase station files.
+If no station file is specified, stdin and stdout 
+are used for input/output.  If a filename is
+specified, an output file is created with extent .up
+appended to the original filename.
+The default topography file is /usr/local/hydrobase/lib/topo.onetenthdeg.swap.dat
+For an alternate topography file, use -T to specify its name,
+-B to specify its bounds, and -I for its grid increment
+Use -N if the alternate topography has positive seafloor depths.
+***********************************************************
+
+Usage:  hb_update_pdr [filename_root(s)] [-Ddirname] [-Eextent] [-F] [-T&lt;topofile&gt;] [-B&lt;west/east/south/north&gt;] [-I&lt;xincr/yincr&gt;] [-N]
+	OPTIONS:
+[-B] : specifies bounds of topography grid. Default [0/360/-90/90]
+[-D] : directory of input station files 
+        ex: -D../data/ 
+[-E] : specifies file extent (default is no extent)
+        ex: -E.dat 
+[-F] : force pdr field to be updated according to topography.
+         Default only updates if pdr field &lt;= 0 or &lt; bottom observed depth
+[-I] : specify x-increment [/y-increment] for topography grid
+         Default [0.10/0.10]
+[-T] : name of topography file. Default is [/usr/local/hydrobase/lib/topo.onetenthdeg.swap.dat]
+[-N] : specify this flag if topography file has positive seafloor depths.
+[-h] : help -- prints this message
+
+</PRE>
+<HR>
+<A NAME="file47">
+<H1>hb_volumetric_anom </H1>
+[<A HREF="#top">top</A>][<A HREF="#file46">prev</A>][<A HREF="#file48">next</A>]
+<PRE>
+
+***********************************************************
+Computes anomalies of heat content and fresh water anomaly from depth-averaged temperature and salinity over a layer specified by two surfaces
+Input can be either observed profiles or gridded profiles
+Output values are gridded.
+Delta-Theta and Delta-Salt are determined relative to monthly average profiles that are read in from files (HydroBase station format -- can be derived from CDF gridded files using hb_cdf2asc).  These files are specified with -Mmonth$filename
+The layer can be strictly adhered to or relaxed to incorporate values from sea surface (if surface1 outcrops above depth=0) down to the seafloor (if surface2 &gt; value at seafloor)
+The layer can be further limited to a depth range using -Z&lt;zmin/zmax&gt;
+For each gridpoint, outputs a line containing:
+lon, lat,dtheta, dsalt, avg_theta, avg_salt, avg_rho, avg_Cp, dz(layer_thickness), dx*dy, delta-Q, delta-F 
+The sum of properties for all grid squares is accumulated and on the last lines are listed the following:
+Total area (km^2)
+Avg thickness of layer (area weighted) (km)
+Total heat content (J)
+Avg theta/unit volume (deg C)
+Avg salinity/unit volume
+Avg density/unit volume (kg/m^3
+***********************************************************
+
+Usage:  hb_volumetric_anom filename_root(s)  -1&lt;mne[pref]/value&gt; -2&lt;mne[pref]/value[b]&gt; -Ixinc[/yinc] [-D&lt;dirname&gt;] [-E&lt;file_extent&gt;][-Z&lt;zmin/zmax&gt;]
+
+  List of filenames MUST be first argument
+  or input is expected to come from stdin...
+    -1  : surface 1 property/value (if property = s_
+          you need to specify pref after s_
+          Append 't' to start with the first observation level available
+          in the event that it is greater than the property value at the top of the layer specified.   
+    -2  : surface 2 property/value (if property = s_
+          you need to specify pref after s_
+          Append b to integrate to the bottom if this surface
+          is deeper than the bottom.  
+    -B  : specify grid bounds (w/e/n/s) in degrees
+    -I  : specify grid spacing (xinc/yinc) in degrees to compute dx and dy
+    -M  : filename for monthly average profiles: -M&lt;month&gt;&lt;filename&gt;
+           month is 3-char identifier (jan, feb, mar....dec,and  cli for climatology)
+           Specify one or more month files.  If a needed month file is not supplied, the cli file will be used to calculate delta-T and delta-S
+           At least one -M file must be specified.
+           If neither the correct month nor a cli file is provided, no values for that month will be computed in the volumetric summation
+   [-D] : specifies dirname for input files (default is current
+          directory)  ex: -D../data/ 
+   [-E] : specifies input_file extent (default is no extent)
+            ex: -E.dat 
+   [-Z] : specify depth limits for layer.
+          Exclude depths that fall outside of these limits from weighted average.
+   [-h] : help... prints this message.
+
+</PRE>
+<HR>
+<A NAME="file48">
+<H1>hb_volumetric</H1>
+[<A HREF="#top">top</A>][<A HREF="#file47">prev</A>][<A HREF="#file49">next</A>]
+<PRE>
+
+***********************************************************
+Computes volumetric heat and salinity content over a layer specified by two surfaces
+The layer can be strictly adhered to or relaxed to incorporate values from sea surface (if surface1 outcrops above depth=0) down to the seafloor (if surface2 &gt; value at seafloor)
+The layer can be further limited to a depth range using -Z&lt;zmin/zmax&gt;
+For each gridpoint, outputs a line containing:
+lon, lat, avg_theta, avg_salt, avg_rho, avg_Cp, dz(layer_thickness), dx*dy, heat_content 
+The sum of properties is accumulated and on the last lines are listed the following:
+Total area (km^2)
+Avg thickness of layer (area weighted) (km)
+Total heat content (J)
+Avg theta/unit volume (deg C)
+Avg salinity/unit volume
+Avg density/unit volume (kg/m^3
+***********************************************************
+
+Usage:  hb_volumetric filename_root(s)  -1&lt;mne[pref]/value&gt; -2&lt;mne[pref]/value[b]&gt; -Ixinc[/yinc] [-D&lt;dirname&gt;] [-E&lt;file_extent&gt;][-Z&lt;zmin/zmax&gt;]
+
+  List of filenames MUST be first argument
+  or input is expected to come from stdin...
+    -1  : surface 1 property/value (if property = s_
+          you need to specify pref after s_
+          Append 't' to start with the first observation level available
+          in the event that it is greater than the property value at the top of the layer specified.   
+    -2  : surface 2 property/value (if property = s_
+          you need to specify pref after s_
+          Append b to integrate to the bottom if this surface
+          is deeper than the bottom.  
+    -I  : specify grid spacing (xinc/yinc) in degrees to compute dx and dy
+   [-D] : specifies dirname for input files (default is current
+          directory)  ex: -D../data/ 
+   [-E] : specifies input_file extent (default is no extent)
+            ex: -E.dat 
+   [-Z] : specify depth limits for layer.
+          Exclude depths that fall outside of these limits from weighted average.
+   [-h] : help... prints this message.
+
+</PRE>
+<HR>
+<A NAME="file49">
+<H1>hb_xyprop </H1>
+[<A HREF="#top">top</A>][<A HREF="#file48">prev</A>][<A HREF="#file50">next</A>]
+<PRE>
+***********************************************************
+Creates a listing of x,y property pairs.  Use hb_propcalc
+to compute properties and pipe the output to
+this utility.  Use the -M option to separate profiles with a &gt;.
+Use the -Z option to delimit a depth range.
+***********************************************************
+
+Usage:  hb_xyprop -X&lt;x_property&gt; -Y&lt;y_property&gt; [-D&lt;dirname&gt;] [-E&lt;file_extent&gt;] [-Zmindepth/maxdepth] [-M] 
+
+    -X  : 2-char property mnemonic to specify X
+    -Y  : 2-char property mnemonic to specify Y
+   OPTIONS:
+   [-D] : specifies directory for input files (default is current directory) 
+            ex: -D../data/ 
+   [-E] : specifies input_file extent (default is no extent)
+            ex: -E.dat 
+   [-F] : specify flag (minimum value) for output.  default [-8.90]
+   [-M] : separate stations with &gt; symbol
+   [-Z] : optional depth delimiter for output
+   [-h] : help -- prints this message
+
+</PRE>
+<HR>
+<A NAME="file50">
+<H1>ices_convert </H1>
+[<A HREF="#top">top</A>][<A HREF="#file49">prev</A>][<A HREF="#file51">next</A>]
+<PRE>
+</PRE>
+<HR>
+<A NAME="file51">
+<H1>sac_convert </H1>
+[<A HREF="#top">top</A>][<A HREF="#file50">prev</A>][<A HREF="#file52">next</A>]
+<PRE>
+*********************************************************** 
+Converts SAC 1-deg analyzed fields
+to HydroBase *.cdf files.  Output files are named by
+to 4-digit WMOsq with extent .sac.cdf
+***********************************************************
+Usage:  sac_convert [-Ooutdir] [-D&lt;dirname&gt;] [-E&lt;file_extent&gt;] [-h]
+-D : directory for input file sac_wtso.asc 
+     (default is current directory) ex: -D../data/ 
+-O : directory for output files.
+-h : help...... prints this message. 
+
+</PRE>
+<HR>
+<A NAME="file52">
+<H1>woa01_convert </H1>
+[<A HREF="#top">top</A>][<A HREF="#file51">prev</A>][<A HREF="#file53">next</A>]
+<PRE>
+
+***********************************************************
+Converts World Ocean Atlas 2001 1-deg analyzed fields
+to HydroBase *.cdf files.  Output files are named by
+to 4-digit WMOsq with extent .woa01.cdf
+***********************************************************
+Usage:  woa01_convert [-Ooutdir] [-D&lt;dirname&gt;] [-E&lt;file_extent&gt;] [-h]
+-D : directory for input files t00an1, s00an1, o00an1, etc... 
+     (default is current directory) ex: -D../data/ 
+-O : directory for output files.
+-h : help...... prints this message. 
+
+</PRE>
+<HR>
+<A NAME="file53">
+<H1>woa98_convert</H1>
+[<A HREF="#top">top</A>][<A HREF="#file52">prev</A>][<A HREF="#file54">next</A>]
+<PRE>
+
+***********************************************************
+Converts World Ocean Atlas 1998 1-deg analyzed fields
+to HydroBase *.cdf files.  Output files are named by
+to 4-digit WMOsq with extent .woa_1deg.cdf
+***********************************************************
+Usage:  woa98_convert [-Ooutdir] [-D&lt;dirname&gt;] [-E&lt;file_extent&gt;] [-h]
+-D : directory for input files t00an1, s00an1, o00an1, etc... 
+     (default is current directory) ex: -D../data/ 
+-O : directory for output files.
+-h : help...... prints this message. 
+
+</PRE>
+<HR>
+<A NAME="file54">
+<H1>woce_btl2hb </H1>
+[<A HREF="#top">top</A>][<A HREF="#file53">prev</A>][<A HREF="#file55">next</A>]
+<PRE>
+***********************************************************
+Converts WHP bottle files to HydroBase station format
+***********************************************************
+
+Usage:  woce_btl2hb filelist -Ssumfile [-D&lt;dirname&gt;] [-E&lt;file_extent&gt;] [-Ooutfile] [-T] [-X] [-h]
+
+  List of filenames MUST be first argument
+ -S  : summary info file. ex:  316N151.sum 
+
+   OPTIONS: 
+[-D] : dirname for input files (default is current directory) 
+            ex: -D../data/ 
+[-E] : input_file extent (default is no extent)
+            ex: -E.dat 
+[-O] : output file 
+[-T] : input temperatures are T68 (default is T90) 
+[-X] : input oxygen units are  ml/l (default is umoles/kg) 
+-h : help...... prints this message.
+
+</PRE>
+<HR>
+<A NAME="file55">
+<H1>woce_ctd2hb </H1>
+[<A HREF="#top">top</A>][<A HREF="#file54">prev</A>][<A HREF="#file56">next</A>]
+<PRE>
+***********************************************************
+Converts WOCE ctd format files to HydroBase2 station format
+By default, the 2db pressure series is decimated to 10 db, but the -P option permits the user to specify the output pressure interval.  A gaussian filter is by default applied to the temperature, salinity, and oxygen profiles.  To omit the filtering, specify filterwidth of 1/1 with the -F option.  You may also specify alternative filterwidths.  The necessary arguments are a list of ctd filenames, the name of the sumfile, and an output filename. 
+***********************************************************
+
+Usage:  woce_ctd2hb filelist -Ooutfile -Ssumfile [-Pprs_int]  [-F&lt;filtwidth&gt;[/&lt;ox_filtwidth&gt;]] [-D&lt;dirname&gt;] [-E&lt;file_extent&gt;]
+
+  List of filenames MUST be first argument!
+    -O  : specifies output file 
+    -S  : specifies summary info file 
+   [-P] : specifies pressure interval of output series (default is 10) 
+   [-F] : specifies filterwidth (npts) or t,s and ox (default is 5/11) 
+   [-D] : specifies dirname for input files (default is current directory) 
+            ex: -D../data/ 
+   [-E] : specifies input_file extent (default is no extent)
+            ex: -E.dat 
+   [-T] : input temperatures are T68 (default is T90) 
+   [-X] : input oxygen units are  ml/l (default is umoles/kg) 
+   [-h] : help -- prints this message
+
+</PRE>
+<HR>
+<A NAME="file56">
+<H1>wod01_convert </H1>
+[<A HREF="#top">top</A>][<A HREF="#file55">prev</A>][<A HREF="#file57">next</A>]
+<PRE>
+***********************************************************
+Converts observed level data files from World Ocean Database 2001 to HydroBase
+***********************************************************
+
+Usage:  wod01_convert filelist -Sshiplistfile [-Ooutfile] [-D&lt;dirname&gt;] [-E&lt;file_extent&gt;] [-h]
+
+  List of filenames must be first argument!
+  Otherwise, input is expected from stdin.
+-S : path/filename for OCL/NODC shipcode table (found in /lib of HydroBase distribution
+-T : specifies data_type code [b,c,f,s,m, or u]
+
+   OPTIONS: 
+-B : specifies output file for rejected stations (noclobber)
+          defaults to stdout
+-D : dirname for input files (default is current directory) 
+            ex: -D../data/ 
+-E : input_file extent (default is no extent)
+            ex: -E.dat 
+-O : output file (overwrites an existing file)
+-h : help...... prints this message. 
+
+</PRE>
+<HR>
+<A NAME="file57">
+<H1>wod98_convert </H1>
+[<A HREF="#top">top</A>][<A HREF="#file56">prev</A>][next]
+<PRE>
+***********************************************************
+Converts .NBD .BD .CTD and .NCT files (observed levels)from WOD98 to HydroBase
+***********************************************************
+
+Usage:  wod98_convert filelist -Ssumfile [-Ooutfile] [-D&lt;dirname&gt;] [-E&lt;file_extent&gt;] [-h]
+
+  List of filenames must be first argument!
+  Otherwise, input is expected from stdin.
+-S : path/filename for OCL/NODC shipcode table.
+-T : specifies data_type code [b,c,f,s,m, or u]
+
+   OPTIONS: 
+-B : specifies output file for rejected stations (noclobber)
+          defaults to stdout
+-D : dirname for input files (default is current directory) 
+            ex: -D../data/ 
+-E : input_file extent (default is no extent)
+            ex: -E.dat 
+-O : output file (overwrites an existing file)
+-h : help...... prints this message. 
+
+</PRE>
+<HR>
+<ADDRESS>Generated by <A HREF="http://www.iki.fi/~mtr/genscript/">GNU enscript 1.6.1</A>.</ADDRESS>
+</BODY>
+</HTML>

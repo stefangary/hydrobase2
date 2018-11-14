@@ -1,0 +1,9 @@
+hb_findblanks
+***********************************************************
+Reads a file of gridded xyz values, identifies gridpoints
+which contain no data, and writes lon/lat of those points to stdout. 
+***********************************************************
+Usage:  hb_findblanks xyz_file(s) -Bwest/east/south/north -Ideltax/deltay  > output_file
+   -B : specifies grid bounds. Ex: -B-80/0/0/65
+   -I : specifies grid increments. Ex: -I1/.5
+

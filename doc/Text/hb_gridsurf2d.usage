@@ -1,0 +1,40 @@
+hb_gridsurf2d 
+Projects a set of property values onto one or more gridded surfaces 
+specified by user. Surfaces can be any property supported by HydroBase or 
+"bot" to extract data at the bottom of each profile.  Input can be either HydroBase station profiles or HydroBase gridded CDF files.
+
+Usage:  hb_gridsurf2d filename_root(s)  [-C] -B/west/east/south/north -I<delta_x[/delta_y]> -P<list_of_properties> [-S<surface_def_file>] [-W<window>[/<w_incr>]] [-D<dirname>] [-E<file_extent>] [-Z]
+
+  List of filenames MUST be first argument or 
+station data is expected from stdin.
+ -B  : specifies grid bounds
+ -I  : specifies grid increment in degrees.  ex: -I0.5
+       If x and y increments differ, separate with
+       a /       ex: -I0.5/1.0
+ -P  : list of properties to project onto surface;
+       ex:  -Ppr/th/sa/ox/ht
+            -P (by itself) produces a list of available properties
+ -S  : file containing surface definitions.
+       If this is not specified these values are expected
+       to come from the standard input device.
+
+    OPTIONS:
+[-C] : input files are cdf format files.
+       (default is HydroBase format)
+[-D] : specifies dirname for input files (default is current directory) 
+       ex: -D../data/ 
+[-E] : specifies input_file extent (default is no extent)
+            ex: -E.dat 
+[-W] : Specifies pressure window (db) for computing 
+       gradient properties {bvfreq, pv}. This 
+       constitutes the range over which observations
+       are incorporated into the gradient computation.
+       The window is centered around each pressure 
+       level being evaluated.
+       w_incr specifies how finely to subdivide the
+       window into increments(db) to create
+       an evenly spaced pressure series over the window.
+          defaults: -W100/10
+[-Z] : use deepest occurrence of surface in each profile (default is use first occurrence of surface) 
+[-h]  :  help -- prints this message.
+
