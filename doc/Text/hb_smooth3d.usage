@@ -1,0 +1,48 @@
+hb_smooth3d
+
+Uses a 5-point Laplacian filter to smooth each
+point in HydroBase cdf files along isopycnals.  
+Multiple cdf files can be input, but all
+must possess the same depth dimensions, and x- y-
+grid increments.  The output cdf file will have the
+same depth dimension, but the lat/lon dimensions specified
+with -B<w/e/s/n> and -I<x/yincr>  
+The input domain is expanded relative to the output
+so that data beyond the borders of the grid can be
+incorporated into the smoothing (amount of expansion
+depends on smoothing radius [-S])
+Computation speed is proportional to the square of
+the smoothing radius.  Using a small radius and large
+weight (such as -S3 -W0.75) is more efficient than a large
+radius/small weight (e.g. -S10 -W0.25) although the results
+are approximately comparable.
+The properties  pr, te, sa  are mandatory 
+in both input and output files -- regardless
+of whether they are specified in the -P argument.
+
+USAGE:  hb_smooth3d cdf_file(s) -B<w/e/s/n> -I<x_inc>[/<y_inc>] -O<outfile> -P<properties> [-D<input_dir>] [-E<input_file_extent>] [-G] [-S<smoothing_radius>] [-W<weight>] [-Z[b][<zmin/zmax>]] [-h] [-:]
+
+ -B  sets the output grid bounds w/e/s/n.
+ -I  sets the output grid spacing for x/y dimensions.
+ -O  name of output cdf file.
+ -P  list of properties to include in output file
+        ex:  -Ppr/th/sa/ox/ht
+       -P (by itself) produces a list of available properties.
+
+	OPTIONS:
+-D directory for input cdf files.
+-E file extent for input cdf files.
+-G force gridnode registration for output(default is pixel registration).
+-S Smoothing radius = # of iterations of Laplacian filter
+      Default is [-S3]
+-W weighting factor: the central node is given weight = 1.0    and surrounding nodes are weighted by this factor.   Default:[0.50]
+-Z  zmin/zmax values limits smoothing to levels
+   between those depths. 
+   'b' switches on option to smooth the bottom layer. 
+   ex: -Zb0/1500 smoothes depth levels 0->1500 meters plus
+            the bottom layer. 
+       -Z1500/3000 smooths just 1500->3000 m leaving  
+           others --including bottom level--unaltered. 
+       -Zb smooths just the bottom.  
+   Default (no -Z argument): smooth all levels including bottom layer.
+-h help...... prints this message. 

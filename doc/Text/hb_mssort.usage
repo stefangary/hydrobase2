@@ -1,0 +1,28 @@
+
+hb_mssort sorts file(s) of HydroBase stations by geographic squares.
+The size of square is specified by the -S parameter.
+Up to MAXF files can be simultaneously opened.
+Any stations that do not fit into an open file
+are stored in a file called msextra.dat -- which can be
+sorted subsequently. An accounting of numbers of stations 
+in each file is written to stdout.
+
+Usage:  hb_mssort list_of_filename_root(s) -S<size> [-Ddir] [-Eextent][-Ooutpath] [-Nnew_extent] [-A] [-T] > logfile
+
+    -S  : size of geographic squares for sorting 
+        options: 1 = 1 deg square 
+                 2 = 2.5 deg  
+                 5 = 5 deg  
+                10 = 10 deg      ex: -S10 
+   [-D] : specifies directory of input files (default is ./) 
+        ex: -D../data/ 
+   [-E] : specifies input file extent (default is no extent)
+        ex: -E.dat 
+   [-O] : specifies directory of output files (default is ./) 
+        ex: -O../natl/ 
+   [-N] : specifies output file extent (default is no extent)
+        ex: -N.dat 
+   [-A] : append to existing files (default is do not alter an existing file.)
+   [-T] : truncate existing files (default is do not alter an existing file.)
+   [-h] : help... prints this message.)
+

@@ -1,0 +1,4 @@
+
+ hb_coriolis Returns Coriolis parameter for a given latitude
+
+Usage: hb_coriolis <latitude>

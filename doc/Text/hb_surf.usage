@@ -1,0 +1,41 @@
+
+hb_surf 
+Projects hydrographic properties onto one or more surfaces
+and outputs the values of those properties (not gridded) together with
+some combination of year, month, lat, and lon for each profile in a HydroBase station file.
+Surfaces may be defined by some value of any property supported
+(e.g. depth, pressure, temperature, density, etc.)
+
+Usage:  hb_surf filename_root(s) -P<list_of_properties> [-B/west/east/south/north] [-S<surface_def_file>] [-W<window>[/<w_incr>]] [-D<dirname>] [-E<file_extent>] [-Y] [-M] [-L] [-I]
+
+List of filenames MUST be first argument.
+  If no files are named, station data expected from stdin.
+   -P  list of properties to project onto surface;
+          ex:  -Ppr/th/sa/ox/ht
+               -P (by itself) produces a list of available properties
+   OPTIONS:
+   -B  specifies grid bounds: w/e/s/n
+   -D  specifies dirname for input files (default is current directory) 
+            ex: -D../data/ 
+   -E  specifies input_file extent (default is no extent)
+            ex: -E.dat 
+   -I  include station ID in output listing
+   -L  include lat/lon in output listing
+   -M  include month in output listing
+   -Y  include year in output listing
+   -S  file containing surface definitions.
+       If this is not specified these values are expected
+       to come from the standard input device.  This file
+       must be specified if station data are input via stdin.
+   -W  Specifies pressure window (db) for computing 
+       gradient properties (bvfreq, pv...) This 
+       constitutes the range over which observations
+       are incorporated into the gradient computation.
+       The window is centered around each pressure 
+       level being evaluated.
+       w_incr specifies how finely to subdivide the
+       window into increments(db) to create
+       an evenly spaced pressure series over the window.
+          defaults: -W100/10 
+   -h  help (prints this message)
+

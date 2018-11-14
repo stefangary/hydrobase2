@@ -1,0 +1,21 @@
+
+hb_topo2xyz 
+Reads gridded bathymetry values from a binary
+topography file  /usr/local/hydrobase/lib/topo.onetenthdeg.swap.dat
+An alternate file can be specified with -T and its
+grid increment with -I.  Use -B to specify the
+bounds of the output area.
+Lon/lat/z values are written to outfile or stdout.
+
+Usage:  hb_topo2xyz  [-T<input_global_topo_file>] [-B<w/e/s/n>] [-I<xincr[/yincr]>] [-N] [-O<outfile>]
+
+   OPTIONS:
+[-B] : specifies output bounds, if not 0/360/-90/90
+[-I] : specify grid increments of input topo file. 
+        ex: -I.1/.5    Default increment is [0.10/0.10]
+[-N] : do NOT multiply bathymetry by -1 to get positive seafloor. 
+          [default is to multiply by -1] 
+[-O] : output file. If not specified output goes to stdout
+[-T] : specify name of binary topography file. Default[/usr/local/hydrobase/lib/topo.onetenthdeg.swap.dat]
+[-h] : help -- prints this message.
+

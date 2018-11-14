@@ -1,0 +1,34 @@
+hb_smooth2d - An iterative 5-pt Laplacian filter for 2-D gridded data.
+
+USAGE: hb_smooth2d [xyzfile(s)] -B<xmin/xmax/ymin/ymax> -I<dx>[/<dy>] [-O<output_file>] [-E<empty>/<mask_val>] [-G]   [-M<mask_file> ] [-N<new_mask_file> ] [-O<output_file>]  [-S<#_smoothing_iterations> ] [-W<weight>]  [-:] [-h]
+
+-B   sets the grid bounds in user units: xmin/xmax/ymin/ymax.
+-I   sets the grid spacing for the x/y directions.
+
+	OPTIONS:
+-E  Explicity write out nodes that are empty or masked.
+       Without -E, only non-empty, non-masked gridnodes are written out.
+       Optionally use NaN for empty nodes instead of [-9.000e+34] 
+       and/or for masked nodes instead of [9.000e+34]
+       Specify -Enan  for empty nodes
+               -E/nan  for masked nodes
+               -Enan/nan for both empty and masked.
+-G  force gridnode registration (default is pixel registration).
+-M name of file containing masking info.
+      Each line of file may specify individual points to mask
+      or multiple polygons separated by a '>' character. 
+      Specify 'I' or 'O' immediately after the '>' character
+      to mask INSIDE or OUTSIDE of polygon.
+      No '>' or a 'C' immediately after the '>'  
+      signifies cell mode masking.  In this mode
+      an {x,y} pair OR {x,y,mask} triplet is given.
+      The <mask> value can be 1 to mask the point
+      or 0 (zero) to unmask the point.
+-N name of new file for x,y pairs of empty or masked gridnodes after smoothing.
+-O  name of output file  (default is stdout).
+-S #of iterations for smoothing
+      Default is [-S3]
+-W weighting factor. Default:[0.25]
+-: input data are ordered y x z  
+       [default order is x y z]   
+-h help....prints this message.  

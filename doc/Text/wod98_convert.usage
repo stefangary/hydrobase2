@@ -1,0 +1,20 @@
+wod98_convert
+Converts .NBD .BD .CTD and .NCT files (observed levels)from WOD98 to HydroBase
+
+Usage:  wod98_convert filelist -Ssumfile [-Ooutfile] [-D<dirname>] [-E<file_extent>] [-h]
+
+  List of filenames must be first argument!
+  Otherwise, input is expected from stdin.
+-S : path/filename for OCL/NODC shipcode table.
+-T : specifies data_type code [b,c,f,s,m, or u]
+
+   OPTIONS: 
+-B : specifies output file for rejected stations (noclobber)
+          defaults to stdout
+-D : dirname for input files (default is current directory) 
+            ex: -D../data/ 
+-E : input_file extent (default is no extent)
+            ex: -E.dat 
+-O : output file (overwrites an existing file)
+-h : help...... prints this message. 
+

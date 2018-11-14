@@ -1,0 +1,47 @@
+hb_grid2xyz
+
+Separates a HydroBase *.grid file (output by hb_gridsurf) into individual
+*.xyz files containing lon, lat, property triplets.  Optionally smooths
+each point with information from surrounding gridpoints (radius specified
+with -R) weighted by a distance factor = .5/d, where d = # of gridpts
+away from the central node.
+
+The program outputs up to 4 files for each property specified:
+   1) property info:   lon, lat, av_value [, n]
+   2) blank gridpts:   lon, lat
+   3) stddev info  :   lon, lat, stddev [, n]
+   4) stddev blanks:   lon, lat
+Stddev information is only output if the -S option is specified.
+
+ Output files are named:     <root><property_id>.xyz
+                             <root><property_id>.blk
+                             <root><property_id>_var.xyz
+                             <root><property_id>_var.blk
+where root is supplied by the -O option and property_id is the same as
+the property_list_ids in the -P option.
+
+The -B option permits you to supply a file containing the lon,lat of
+gridpoints to be blanked.  Its purpose is to mask out bathymetry,
+coastlines, etc...  This list is checked before computing each new
+gridpoint.
+Usage:  hb_grid2xyz input_filename -O<output_file_root> -P<property_list>  [-R<smoothing_radius>]  [-N] [-S] [-B<blanking_info_file> [-h]
+
+   specify input file_name (HydroBase *.grid file 
+   output by hb_gridsurf) as first argument
+    -O  : specifies root name for output files
+          ex: -Opr200.1970_75.
+    -P  : specifies properties to project onto surface
+          Enter a list of your choices (separated by slashes)...
+     ex: -Ppr/th/sa/ox/de/ht
+         -P (by itself) will print a menu of available properties
+   [-R] : smoothing radius (# of gridpts away from central node)
+          weighting factor = .5/radius is applied
+            ex: -R0 provides no smoothing [default]
+                -R1 gives 3*gridincr smoothing, -R2 gives 5*gridincr smoothing
+   [-N] : output number of obs incorporated into each gridpt.
+   [-S] : output std dev file for each property.
+   [-B] : specifies name of file with lon/lat of pts
+          to be blanked.  This list is checked BEFORE
+          computing each new gridpoint.
+   [-h] : help -- prints this message
+

@@ -1,0 +1,13 @@
+
+hb_4mike Finds depths associated with specified potential temperatures.
+
+Usage:  hb_4mike filename_root(s)  [-D<dirname>] [-E<file_extent>] [-L<theta_level_file>]
+
+  List of filenames MUST be first argument!
+   [-L] : optional file of theta levels 
+   [-D] : specifies directory for input files (default is current directory) 
+            ex: -D../data/ 
+   [-E] : specifies input_file extent (default is no extent)
+            ex: -E.dat -h help...... prints this message. 
+
+

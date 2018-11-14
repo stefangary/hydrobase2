@@ -1,0 +1,31 @@
+
+hb_4matlab computes properties specified with -P option at each depth level in a station 
+ and outputs an ascii listing of each level plus the lat/lon/year/month/station/cruise of the observation.
+
+Usage:  hb_4matlab filename_root(s)  -P<list_of_properties>  [-D<dirname>] [-E<file_extent>] [-W<window>/<w_incr>]
+
+  List of filenames MUST be first argument!
+    -P  : list of properties to project onto surface;
+          ex:  -Ppr/th/sa/ox/ht
+               -P (by itself) produces a list of available properties
+   [-L] : option to output lat/lon 
+   [-Y] : option to output year 
+   [-M] : option to output month 
+   [-S] : option to output station#/cruise# 
+   [-D] : specifies dirname for input files (default is current directory) 
+            ex: -D../data/ 
+   [-E] : specifies input_file extent (default is no extent)
+            ex: -E.dat 
+   [-W] : Specifies pressure window (db) for computing 
+          gradient properties (bvfreq, pv...) This 
+          constitutes the range over which observations
+          are incorporated into the gradient computation.
+          The window is centered around each pressure 
+          level being evaluated.
+          w_incr specifies how finely to subdivide the
+          window into increments(db) to create
+          an evenly spaced pressure series over the window.
+          defaults: -W100/10
+    [-h] help...... prints this message. 
+
+

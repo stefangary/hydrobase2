@@ -1,0 +1,34 @@
+hb_statfit_ts
+.   Computes linear fits to the t,s data for each sigma bin specified  
+.   in the sigbin file.  The theta-salt curve is approximated by connecting
+.   the mean t,s point in each density bin.  The line tangent to this curve
+.   at the mean t,s point then approximates the t-s relation in each bin. 
+.   We determine the slope, y-intercept, and standard error for each bin.
+.   Initially, we assume theta as the independent variable. If the slope of
+.   the linear fit exceeds a critical value (maxslope), we designate salt
+.   as the independent variable and compute the statistics for theta = F(salt)
+.   and oxygen = F(salt).  This helps to identify situations where the 
+.   F(theta) fit for a particular density bin does not approximate the 
+.   overall t-s relationship.
+.   The output file contains 1 header line followed by a line for each density
+.   bin:
+.   number of bins
+.   bin #, T or S,  slope, intercept, error, n  
+
+Usage:  hb_statfit_ts list_of_filenames -Ooutfile -Ssigma_binfile [-Ddirname] [-Eextent] [-Mmaxslope] [-Xminpts] [-Pplotfile] 
+   -O  : specifies output file  
+          ex: -O7102.ts_fit 
+   -S  : specifies file in which sigma bins are defined.
+          ex: -Ssigbins.natl 
+  [-D] : specifies directory of input files (default is ./) 
+        ex: -D../data/ 
+  [-E]  : specifies input_file extent (default is no extent)
+  [-M] : maximum slope (delta-s/delta-t) for which theta
+         will be used as x variable in linear fit
+  [-X] : min # of points in density bin to keep data
+         (default = 3)
+          ex: -X3 
+  [-P] : turns on plotfile option and specifies fileroot 
+          to which will be appended mean.ts and slope.ts
+          ex: -P7207
+

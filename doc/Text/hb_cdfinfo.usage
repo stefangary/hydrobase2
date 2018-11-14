@@ -1,0 +1,7 @@
+
+hb_cdfinfo prints out various information about the 
+
+contents of a HydroBase cdf_file
+
+Usage: hb_cdfinfo cdf_file_name 
+       hb_cdfinfo -h .... prints this message. 

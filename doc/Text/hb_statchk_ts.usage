@@ -1,0 +1,40 @@
+hb_statchk_ts
+.   Examines each data point in a file and eliminates points which are 
+.   statistically distant from the t-s relation defined for the bin.  
+.   Linear theta-s plus a standard error of estimate are computed 
+.   for density (sigma) bins by the program hb_statfit_ts.  These coefficients  
+.   determine an acceptable range of values in each bin  -- n standard 
+.   errors from the line.  If a t-s point falls outside this range, the entire
+.   scan is eliminated (because a scan must have both to place it in a density 
+.   bin). A point falling in no density bin or in a density bin containing less 
+.   than 3 pts is eliminated.  A station bearing >10 (or >50%) bad scans is 
+.   completely eliminated.   The 
+.   number of eliminated points is tallied as a percentage of the total number 
+.   of scans and written to the logfile (or stdout).
+
+
+Usage:  hb_statchk_ts -Iinfile -Ooutfile -Sstatfile [-Bbad_file] [-Ddeep_statfile]  [-N#stderr_ts] [-M#stderr_surf/rho_max] [-Qpercent] [-Llogfile] [-Pfile_rootname] 
+   -I  : specifies input HydroBase file
+        ex: -I7102_0.raw 
+   -O  : specifies output file  
+        ex: -O7102_0.st1 
+   -S  : specifies file with statistics for each sigma bin.
+        ex: -S7102_0.tsfit 
+  [-B] : specifies file to which bad data will be written  
+        ex: -O7102_0.bad 
+  [-D] : specifies file in which statistics for sigma bins deeper than 
+         1000m are defined.
+        ex: -D7102.statfit 
+  [-N] : # of standard errors to define good data.
+        ex: -N2.3 
+  [-M] : # of standard errors for surface waters defining
+         good data and the density boundary (sigma0) to
+         which this # of std errors is applied.
+        ex: -N5/26.6 
+  [-P] : enables plotfile option and specifies root name
+         of files to which _ts.dat will be appended.
+        ex: -P7102_0
+  [-Q] : quota (in percent) of obs that can be bad
+         before declaring entire station bad. 
+         default is 0.650000 
+

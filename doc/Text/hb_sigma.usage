@@ -1,0 +1,7 @@
+hb_sigma
+
+Computes potential density rel to pref from
+specified values of pressure, pot.temp, and salt
+
+Usage:  hb_sigma  p  theta  s  pref
+

@@ -1,0 +1,21 @@
+hb_stationsort
+Sorts HydroBase station files into individual station files.
+
+Usage:  hb_stationsort list_of_input_files -[N]new_file_root_name [-Ooutpath] [-T] [-D<dir>] [-E<extent>]
+
+Infile_list must be first arguments or else input is expected from stdin
+   [-N] : optionally specifies output file root 
+        to which will be appended a number reflecting 
+        the ordinal position of that station. 
+        ex: with -Npan1964  
+        stations will be named pan1964.0001, pan1964.0002, etc 
+        Without this option (the default)files are
+        named by countrycode, ship, cruise, and station
+   [-D] : specifies directory of input files (default is ./) 
+        ex: -D../data/ 
+   [-E] : specifies input_file extent (default is no extent)
+        ex: -E.dat 
+   [-O] : specifies directory of output files (default is ./) 
+        ex: -O../natl/ 
+   [-T] : truncate existing files (default is do not clobber an existing file.)
+

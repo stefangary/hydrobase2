@@ -1,0 +1,43 @@
+
+hb_layerav 
+Computes average value of properties over a pressure interval
+defined by two surfaces. Each observation contributing to the average
+is weighted by the pressure over which it was observed.
+The layer can be further limited to a pressure range using -Z<zmin/zmax>
+Outputs year, month, lat, lon, prop1 .. propN. 
+
+Usage:  hb_layerav filename_root(s)  -1<mne[pref]/value> -2<mne[pref]/value[b]> -P<list_of_properties> [-D<dirname>] [-E<file_extent>] [-I] [-L] [-M] [-T] [-Y] [-W<window>[/<w_incr>] [-Z<zmin/zmax>]
+
+  List of filenames MUST be first argument
+  or input is expected to come from stdin...
+    -1  : surface 1 property/value (if property = s_
+          you need to specify pref after s_
+    -2  : surface 2 property/value (if property = s_
+          you need to specify pref after s_
+          Append b to average down to the bottom if this
+          surface is deeper than the bottom.  This will
+          only occur if deepest observation is within 100m of the seafloor.
+    -P  : list of properties: ex: -Pth/sa
+          by itself, -P will list available properties
+   [-D] : specifies dirname for input files (default is current
+          directory)  ex: -D../data/ 
+   [-E] : specifies input_file extent (default is no extent)
+            ex: -E.dat 
+   [-I] : include station ID in output listing
+   [-L] : include lat/lon in output listing
+   [-M] : include month in output listing
+   [-Y] : include year in output listing
+   [-T] : include thickness of layer in output listing
+   [-W] : pressure window in db for computing gradient
+          properties (bvfreq, pv...) The window is applied
+          both above and below each observation level and
+          constitutes the range over which observations
+          are incorporated into the gradient computation.
+          The optional w_incr value specifies an interval
+          (db) into which the pressure range is subdivided
+          to create an evenly spaced pr series over the
+          window.  Default values: [50/10]
+   [-Z] : specify pressure limits for layer.
+          Exclude pressures that fall outside of these limits from weighted average.
+   [-h] : help... prints this message.
+

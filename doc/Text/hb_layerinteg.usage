@@ -1,0 +1,47 @@
+
+hb_layerinteg integrates a property over a layer specified by two surfaces
+The property is weighted in the vertical by rho * dz.
+The layer can be further limited to a pressure range using -Z<zmin/zmax>
+For each station, outputs a line containing some combination of year, month, lat, lon, station_id  plus avg_prop, avg_rho, layer_thickness, distance_between_stations, avg_prop*avg_rho*layer_thickness*distance, cumulative_sum
+ 
+
+Usage:  hb_layerinteg filename_root(s)  -1<mne[pref]/value> -2<mne[pref]/value[b]> -P<list_of_properties> [-A<startlat/lon>] [-B<minlon/maxlon/minlat/maxlat>] [-D<dirname>] [-E<file_extent>] [-I] [-W<window>[/<w_incr>] [-Z<zmin/zmax>]
+
+  List of filenames MUST be first argument
+  or input is expected to come from stdin...
+    -1  : surface 1 property/value (if property = s_
+          you need to specify pref after s_
+    -2  : surface 2 property/value (if property = s_
+          you need to specify pref after s_
+          Append b to to integrate to the bottom if this surface
+          is deeper than the bottom.  This will only occur if the
+          deepest observation is within 100 meters of the seafloor depth.
+    -P  : property to integrate (only one allowed): ex: -Psa
+          by itself, -P will list available properties
+   [-A] : specify starting position (lat/lon) and output distance between stations
+          The stations will be sorted by increasing distance from this point.
+          If no starting point is specified, the stations will not be sorted
+         but will be taken in the order they appear in the file.
+   [-B] : specify geographic bounds.  Stations that do not 
+          fall within bounds will not be included in the output. 
+            ex: -B-75/-10/20/30 
+   [-D] : specifies dirname for input files (default is current
+          directory)  ex: -D../data/ 
+   [-E] : specifies input_file extent (default is no extent)
+            ex: -E.dat 
+   [-I] : specify an identifier (char string) to be output (e.g. year, lat, lon
+            Be sure to enclose in double quotes if string contains white space
+            ex: -I1999  or -I24   or -IKN164  
+   [-W] : pressure window in db for computing gradient
+          properties (bvfreq, pv...) The window is applied
+          both above and below each observation level and
+          constitutes the range over which observations
+          are incorporated into the gradient computation.
+          The optional w_incr value specifies an interval
+          (db) into which the pressure range is subdivided
+          to create an evenly spaced pr series over the
+          window.  Default values: [50/10]
+   [-Z] : specify pressure limits for layer.
+          Exclude pressures that fall outside of these limits from weighted average.
+   [-h] : help... prints this message.
+

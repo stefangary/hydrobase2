@@ -1,0 +1,15 @@
+
+Extracts latitude/longitude from HydroBase data files
+    and writes it to the stdout device.
+
+Usage:  hb_getpos list_of_filenames [-Ddirname] [-Eextent] [-Bminlon/maxlon/minlat/maxlat] [-:]
+ If no infiles are specified, input is expected from stdin
+    -D  : specifies directory of input files (default is ./) 
+        ex: -D../data/ 
+    -E  : specifies input_file extent (default is no extent)
+        ex: -E.dat 
+    -B  : specifies optional boundaries.
+        ex: -B-90/0/0/65 
+    -:  : outputs latitude/longitude. 
+        default is lon/lat 
+

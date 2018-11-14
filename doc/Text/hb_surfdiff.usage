@@ -1,0 +1,10 @@
+hb_surfdiff
+Reads 2 files of gridded xyz values, and subtracts the values 
+in the second file from the first for gridpoints where both contain
+information and writes them out to the stdout device.
+
+Usage:  hb_surfdiff file1 file2 -Bwest/east/south/north -Ideltax/deltay  > output_file
+  -B   specifies grid bounds. Ex: -B-80/0/0/65
+  -I   specifies grid increments. Ex: -I1/.5
+ [-:]  order of first 2 columns is lat/lon (default is lon/lat)
+

@@ -1,0 +1,10 @@
+sac_convert 
+Converts SAC 1-deg analyzed fields
+to HydroBase *.cdf files.  Output files are named by
+to 4-digit WMOsq with extent .sac.cdf
+Usage:  sac_convert [-Ooutdir] [-D<dirname>] [-E<file_extent>] [-h]
+-D : directory for input file sac_wtso.asc 
+     (default is current directory) ex: -D../data/ 
+-O : directory for output files.
+-h : help...... prints this message. 
+

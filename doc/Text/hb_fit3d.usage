@@ -1,0 +1,45 @@
+hb_fit3d
+
+Uses an iterative Laplacian/spline algorithm to isopycnally interpolate missing
+gridpoints in HydroBase cdf files. Location of missing values are determined 
+from the topography file (can be specified with -W). A search radius
+parameter determines the maximum acceptable distance an
+interpolated value can be from an observed value.  The
+input domain is expanded relative to the output domain 
+so that data around borders of the grid can be incorporated.
+All input cdf files must possess the same depth dimensions
+and grid spacing.  The output cdf file will have the
+same depth dimension, but the lat/lon dimensions specified
+with -B<w/e/s/n> and -I<x/yincr>
+
+USAGE:  hb_fit3d cdf_file(s) -B<w/e/s/n> -I<x_inc>[/<y_inc>] -O<outfile> -P<properties> [-D<input_dir>] [-E<input_file_extent>] [-G] [-Q<max_iterations>] [-Ssearch_radius] [-T<tension>[b|i]] [-U<topo_xinc/yinc>] [-W<topofile>] [-V] [-h] [-:]
+
+ -B  sets the output grid bounds w/e/s/n.
+ -I  sets the output grid spacing for x/y dimensions.
+ -O  name of output cdf file.
+ -P  list of properties to include in output file
+        ex:  -Ppr/th/sa/ox/ht
+       -P (by itself) produces a list of available properties
+
+	OPTIONS:
+-D directory for input cdf files.
+-E file extent for input cdf files.
+-G force gridnode registration for ouput (default is pixel registration).
+-Q sets the max iterations to achieve convergence.  [10]
+-S search for a non-empty gridnode within <xradius/yradius> of an empty node
+      in the initial grid.  Estimate a value only if a non-empty node is found.
+      x- yradii are specified in xy-units (degrees) .
+      <radius> = 0 interpolates no gridnodes but puts in masking info.
+      Default is [2.0/2.0]
+-T tension parameter -- range [0..1]
+      A value of 1 produces a pure laplacian solution,
+      while a 0 value gives a harmonic spline solution
+      with a smoother field but the possibility of 
+      spurious peaks or valleys. Default: [-T0.500000]
+-U  xinc/yinc for topography file: Default is [0.1] 
+-V verbose.  
+-W  full pathname of topography file. This is a binary file of global
+     topography values stored as 2-byte integers beginning at
+     90S, 0E. The default file is [/usr/local/hydrobase/lib/topo.onetenthdeg.swap.dat]
+-V verbose.  
+-h help...... prints this message. 

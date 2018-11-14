@@ -1,0 +1,20 @@
+
+Computes course heading from pointA -> pointB 
+ and positions at evenly spaced intervals along track.
+Outputs  station # (optional), lat, lon, hdg 
+
+Usage:  hb_gettrack -A[m]<lat/lon> -B[m]<lat/lon>  [-D<distance>] [-H] [-K] [-M] [-S<start_sta>] [-h]
+-A :  lat/lon of starting point. If m is specified, lat and
+         lon are each deg/mins
+-B :  lat/lon of end point. If m is specified, lat and
+         lon are each deg/mins
+
+  OPTIONS:
+-D :  distance between stations.
+-H :  output the bearing from pointA to pointB.
+-K :  distances are in km (default is nm).
+-M :  output positions in deg/mins (default is decimal degrees).
+-S :  output station # in 1st column sequentially starting with
+         station specified.  ex:  -S1-h help...... prints this message. 
+
+

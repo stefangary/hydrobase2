@@ -1,0 +1,42 @@
+This text file documents how to
+add a new property to HB2.
+
+List all available properties with
+hb_propcalc -P
+
+If it's not there, then:
+
+1) Decide on a two character ID
+   dt/dp = tp, dt/dz = tz
+
+2) In the file hydrobase.h,
+
+      + Augment variable MAXPROP by one (or however many properties to add).
+      + Add the 2 char ID (capitalized) to the list property{}.
+
+3) In the file prop_subs.c
+
+      + Add the 2 char ID (in the same order as in hydrobase.h) to the
+	list prop_mne{}.
+      + Add the property description to prop_descrip{}.
+      + Add the property units to prop_units{}.
+      + Add the field width to field_width{}.
+      + Add to field_precis{}.
+      + Add to the case statement in the function get_prop_indx()
+      + Add or modify one of the compute_*() functions in this file.
+	    For the case of TP, added compute_dtdp()
+
+4) Allow this quantity to be computed in the case list whereever
+   multiple properties are computed.
+
+      + hb_propcalc.c
+      + hb_4matlab.c
+      + hb_geostroph_section.c
+      + hb_getbottom.c
+      + hb_grid3d.c
+      + hb_layerav.c
+      + hb_layerinteg.c
+      + hb_section.c
+      + hb_siftlevs.c
+      + hb_siftsta.c
+      + hb_slice.c

@@ -1,0 +1,21 @@
+hb_xyprop
+
+Creates a listing of x,y property pairs.  Use hb_propcalc
+to compute properties and pipe the output to
+this utility.  Use the -M option to separate profiles with a >.
+Use the -Z option to delimit a depth range.
+
+Usage:  hb_xyprop -X<x_property> -Y<y_property> [-D<dirname>] [-E<file_extent>] [-Zmindepth/maxdepth] [-M] 
+
+    -X  : 2-char property mnemonic to specify X
+    -Y  : 2-char property mnemonic to specify Y
+   OPTIONS:
+   [-D] : specifies directory for input files (default is current directory) 
+            ex: -D../data/ 
+   [-E] : specifies input_file extent (default is no extent)
+            ex: -E.dat 
+   [-F] : specify flag (minimum value) for output.  default [-8.90]
+   [-M] : separate stations with > symbol
+   [-Z] : optional depth delimiter for output
+   [-h] : help -- prints this message
+

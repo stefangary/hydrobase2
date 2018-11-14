@@ -1,0 +1,20 @@
+
+Converts observed level data files from World Ocean Database 2001 to HydroBase
+
+Usage:  wod01_convert filelist -Sshiplistfile [-Ooutfile] [-D<dirname>] [-E<file_extent>] [-h]
+
+  List of filenames must be first argument!
+  Otherwise, input is expected from stdin.
+-S : path/filename for OCL/NODC shipcode table (found in /lib of HydroBase distribution
+-T : specifies data_type code [b,c,f,s,m, or u]
+
+   OPTIONS: 
+-B : specifies output file for rejected stations (noclobber)
+          defaults to stdout
+-D : dirname for input files (default is current directory) 
+            ex: -D../data/ 
+-E : input_file extent (default is no extent)
+            ex: -E.dat 
+-O : output file (overwrites an existing file)
+-h : help...... prints this message. 
+

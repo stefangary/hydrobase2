@@ -1,0 +1,28 @@
+
+hb_getbottom finds the deepest observation level of Zproperty
+ at each station and outputs an ascii listing of X,Y values
+
+Usage:  hb_getbottom filename_root(s)  -X<prop> -Y<prop> -Z<prop> [-K] [-I] [-S<distance_file>] [-D<dirname>] [-E<file_extent>] [-h] 
+
+  List of filenames MUST be first argument or input is expected to come from stdin
+-X  : x-property: [la]t,[lo]n, [di]stance or [yr]year;
+      ex:  -Xlo
+           -X (by itself) produces a list of available properties
+-Y  : y-property:  2char mnemonic
+      ex:  -Ypr
+           -Y (by itself) produces a list of available properties
+-Z  : Z-property:  2char mnemonic
+      ex:  -Zpr
+           -Z (by itself) produces a list of available properties
+-K :  distances are in km (default is nm).
+-I :  output the station_id in first column.
+-S :  name of file containing station/distance/depth for 
+      assigning distance along track each cast.  If this option is not
+      used, distance is computed from lat/lon.  ex: -Skn104.ctd.depth 
+-D :  dirname for input files (default is current directory) 
+      ex: -D../data/ 
+-E :  input_file extent (default is no extent)
+      ex: -E.dat 
+-h :  help...... prints this message. 
+
+
