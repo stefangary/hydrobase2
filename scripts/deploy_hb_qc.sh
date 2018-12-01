@@ -24,6 +24,13 @@
 # where to deploy the HB QC
 set base_hb_qc_dir = $1
 
+echo Setting up HB QC directories in ${base_hb_qc_dir}...
+
+# Get directory of hydrobase installation
+cd ..
+set hb_dir = `pwd`
+cd scripts
+
 # Make directories.
 # Note that state binning depends on HB3 (not just HB2)
 # but, if skipped, the rest of the pipeline resides in
@@ -51,7 +58,7 @@ cp import_wod.sh ${base_hb_qc_dir}/step1_import
 # hb_rangechk_ts in a more complicated way.
 cp remove_fill_values.sh ${base_hb_qc_dir}/step2_range_check
 cp range_check_basin.sh ${base_hb_qc_dir}/step2_range_check
-ln -sv ../lists/zlev_10m.txt ${base_hb_qc_dir}/step2_range_check/zlev_10m.txt
+ln -s ${hb_dir}/lists/zlev_10m.txt ${base_hb_qc_dir}/step2_range_check/zlev_10m.txt
 
 # Step 3 state bins the data using Gary et al., (2018)
 # approach to ensuring that data distribution does not
@@ -60,13 +67,16 @@ ln -sv ../lists/zlev_10m.txt ${base_hb_qc_dir}/step2_range_check/zlev_10m.txt
 # parallel instances of the worker script (wk).
 cp fe_state_bin_monthly.sh ${base_hb_qc_dir}/step3_state_bin
 cp wk_state_bin_monthly.sh ${base_hb_qc_dir}/step3_state_bin
-ln -sv ../lists/zlev_10m.txt ${base_hb_qc_dir}/step2_range_check/zlev_10m.txt
+ln -s ${hb_dir}/lists/zlev_10m.txt ${base_hb_qc_dir}/step3_state_bin/zlev_10m.txt
 
 # Step 4 checks the data in temperature-salinity
 # space.
 cp stat_check_basin.sh ${base_hb_qc_dir}/step4_ts_check
-ln -sv ../lists/sigbins.txt ${base_hb_qc_dir}/step2_range_check/sigbins.txt
-ln -sv statplo.sh ${base_hb_qc_dir}/step2_range_check/statplo.sh
+ln -s ${hb_dir}/lists/sigbins.txt ${base_hb_qc_dir}/step4_ts_check/sigbins.txt
+ln -s ${hb_dir}/scripts/statplo.sh ${base_hb_qc_dir}/step4_ts_check/statplo.sh
+
+# Copy the main QC front end script
+cp fe_hb_qc.sh ${base_hb_qc_dir}/
 
 # Done!
 echo Hydrobase QC directories and scripts deployed.
