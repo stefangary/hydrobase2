@@ -1,6 +1,6 @@
 /*  wod13_convert.c
 ----------------------------------------------------------------------------------
-*   Reads World Ocean Database 2013 observed level hydrographic data files
+*   Reads World Ocean Database 2013/18 observed level hydrographic data files
 *   extracts :    header info
 *                 p,d,t,s,ox,n2,n3,si,p4,f1,f2,f3,he,tu
 *   
@@ -8,14 +8,19 @@
 ----------------------------------------------------------------------------------
 * Originally based on wod01_convert.c, part of the original
 * Hydrobase2 distribution.  Additional comments and changes
-* added by stefan.gary@sams.ac.uk based on the Aug. 06, 2015
+* added by Stefan Gary based on the Aug. 06, 2015
 * version of wodC.c from WOD website.
 *
 * Also, looked at the wod_convert.c distributed in HB3 and
 * included the ITS-68/90 temperature scale detection here
 * as well.  The wod_convert.c version in HB3 is not updated
 * to WOD13 because still uses the old 40 std depth levels
-* while WOD13 uses 137 std depth levels.
+* while WOD13 uses 137 std depth levels.  For compatibility
+* whith HB2 (which does not use ITS-90) and with HB3 (which
+* can use either one), ALL OUTPUT WILL BE IN ITS-68.
+*
+* Tested with a subset of WOD18 native data and appears to
+* work just fine.
 */
 #include <stdio.h>
 #include <stdlib.h>
