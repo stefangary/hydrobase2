@@ -13,20 +13,27 @@
 # of the GNU LGPL v3 or later version.
 #---------------------------------------------
 
+# Define location of hydrobase install
+set hb2_dir = /usr/local/hb2/bin
+
 # Define the hydrobase files to input
 ########################
 # Pass 1:
-set infile = ../step1_import/all.espna.nf.1950to2015.ge200.hb
+#set infile = ../step1_import/all.espna.nf.1950to2015.ge200.hb
 
 ########################
 # Pass 2:
 #ln -sv ../step2c_ts_check/archive_pass1/all.espna.nf.1950to2015.ge200.hb.rchk1_schk1 ./all.espna.nf.1950to2015.ge200.hb
-set infile = ./all.espna.nf.1950to2015.ge200.hb
+#set infile = ./all.espna.nf.1950to2015.ge200.hb
 
+#######################
+# IN GENERAL:
+set infile = $1
 set bn = `basename $infile`
 
 # Define the ending for all the files stored in this run.
-set runid = rchk2_schk1
+#set runid = rchk2_schk1
+set runid = $2
 
 # Define the output file
 set outfile = ${bn}.${runid}
@@ -53,7 +60,7 @@ cat << ENDLIST > ${rangefile}
 ENDLIST
 
 # Break up the input files into ms01.
-hb_mssort $infile -S1 -O${ms01dir}/ -N.hb > ms01.log.${runid}
+${hb2_dir}/hb_mssort $infile -S1 -O${ms01dir}/ -N.hb > ms01.log.${runid}
 
 # For each ms01 file,
 foreach msfile ( ${ms01dir}/*.hb )
@@ -63,7 +70,7 @@ foreach msfile ( ${ms01dir}/*.hb )
 
     # Run the rangecheck
     # Use the 20% criteria as in Lozier et al., 1995
-    hb_rangechk_ts $msfile -B${msbn}.bad.tmp -R${rangefile} -O${msbn}.chk.tmp -L${msbn}.log.tmp -A3.0 -Q20.0
+    ${hb2_dir}/hb_rangechk_ts $msfile -B${msbn}.bad.tmp -R${rangefile} -O${msbn}.chk.tmp -L${msbn}.log.tmp -A3.0 -Q20.0
 
     # Concatenate information
     cat ${msbn}.chk.tmp >> $outfile

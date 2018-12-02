@@ -61,8 +61,8 @@ echo start: `date` > time.log
 # Using HB2 only for hb_getpos because sfg
 # added the -T option to HB2 hb_getpos and
 # not present in HB3.
-set hb3dir = '/home/sa03sg/src/HB3/bin'
-set hb2dir = '/home/sa03sg/src/HB2/bin'
+set hb3dir = '/usr/local/hb3/bin'
+set hb2dir = '/usr/local/hb2/bin'
 
 #=============================================
 # Define grid parameters for output.

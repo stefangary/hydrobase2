@@ -51,6 +51,7 @@ mkdir -p ${base_hb_qc_dir}/step4_ts_check/p1
 # Step 1 converts World Ocean Database data
 # to hydrobase format.
 cp import_wod.sh ${base_hb_qc_dir}/step1_import
+ln -s ${hb_dir}/lists/platformlist_wod13.txt ${base_hb_qc_dir}/step1_import/ship_codes.txt
 
 # Step 2 has two scripts because the removal of
 # fill values uses hb_rangechk_ts in a very simple
@@ -68,6 +69,7 @@ ln -s ${hb_dir}/lists/zlev_10m.txt ${base_hb_qc_dir}/step2_range_check/zlev_10m.
 cp fe_state_bin_monthly.sh ${base_hb_qc_dir}/step3_state_bin
 cp wk_state_bin_monthly.sh ${base_hb_qc_dir}/step3_state_bin
 ln -s ${hb_dir}/lists/zlev_10m.txt ${base_hb_qc_dir}/step3_state_bin/zlev_10m.txt
+ln -s ${hb_dir}/lists ${base_hb_qc_dir}/step3_state_bin/lists
 
 # Step 4 checks the data in temperature-salinity
 # space.
@@ -83,3 +85,9 @@ echo Hydrobase QC directories and scripts deployed.
 echo You will want to copy or link the input data
 echo into the directory ${base_hb_qc_dir}/step1_import
 echo and then you can run fe_hb_qc.sh.
+
+# And, include these lines if you want to use
+# the sample data included with the HB distribution.
+gunzip -c ${hb_dir}/examples/ocldb1543698377.11445.OSD.gz > ${base_hb_qc_dir}/step1_import/OSD.wod
+gunzip -c ${hb_dir}/examples/ocldb1543698377.11445.PFL.gz > ${base_hb_qc_dir}/step1_import/PFL.wod
+

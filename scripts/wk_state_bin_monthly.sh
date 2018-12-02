@@ -50,8 +50,8 @@
 # directory with $2.
 
 # Set HB3 installation
-set hb3dir = /home/sa03sg/src/HB3/bin
-set sigdir = /home/sa03sg/src/HB3/lists
+set hb3dir = /usr/local/hb3/bin
+set sigdir = ./lists
 
 # Set binning increment [deg]
 set xinc_bin = 0.20
