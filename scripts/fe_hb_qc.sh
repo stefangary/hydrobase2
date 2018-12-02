@@ -25,7 +25,8 @@
 
 echo Importing data...
 cd step1_import
-ls
+import_wod.sh
+cat good.*.hb > good.all.hb
 cd ..
 
 #===========================
@@ -34,7 +35,8 @@ cd ..
 
 echo Range checking data...
 cd step2_range_check
-ls
+remove_fill_values.sh ../step1_import/good.all.hb
+range_check_basin.sh good.all.hb.nofill rchk1
 cd ..
 
 #===========================
@@ -43,7 +45,7 @@ cd ..
 
 echo State binning data...
 cd step3_state_bin
-ls
+fe_state_bin_monthly.sh ../step2_range_check/good.all.hb.nofill.rchk1
 cd ..
 
 #===========================

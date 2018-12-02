@@ -13,6 +13,9 @@
 # of the GNU LGPL v3 or later.
 #---------------------------------------------
 
+# Define hydrobase binaries location
+set hb2_dir = /usr/local/hb2/bin/
+
 # Define the hydrobase files to input
 set infile = $1
 set bn = `basename $infile`
@@ -41,7 +44,7 @@ cat << ENDLIST > ${rangefile}
 ENDLIST
 
 # Run the rangecheck
-hb_rangechk_ts $infile -B${badfile} -R${rangefile} -O${outfile} -L${logfile} -Q100.0
+${hb2_dir}/hb_rangechk_ts $infile -B${badfile} -R${rangefile} -O${outfile} -L${logfile} -Q100.0
 
 # Final clean up
 rm ${rangefile}

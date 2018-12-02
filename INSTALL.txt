@@ -1,0 +1,16 @@
+Hydrobase needs NetCDF 3.6.3.  Since I use both
+Netcdf 3.6.3 and NetCDF 4+, I've put my netcdf 3.6.3
+installation in /usr/local/netcdf3, but that can be
+changed at the top of ./src/makefile.
+
+Similarly, since both Hydrobase2 and Hydrobase3 are
+useful to have on the same machine at the same time,
+I use these install directories:
+/usr/local/hb2/bin
+/usr/local/hb3/bin
+which can be changed in the makefile.  Some of the
+scripts use these directories to call to HB2 or HB3
+functions, so be careful if you choose a different
+install path.  These directories should be created
+before attempting to install HB2 or HB3.
+
