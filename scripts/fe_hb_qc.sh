@@ -4,6 +4,11 @@
 # all the HB QC pipeline as
 # contained in the scripts here.
 #
+# This is a simple example,
+# depending on the situation
+# you may want to add or remove
+# steps.
+#
 # Stefan Gary, 2018
 #
 #===========================
@@ -42,10 +47,18 @@ cd ..
 #===========================
 # Step 3: State bin data
 #===========================
-
+# Skipping over this because
+# it takes a long time and not
+# really necessary for this
+# trail data set.  Note that
+# including state binning in
+# the QC pipeline requires
+# uncommenting the lines
+# that refer to the .stb files
+# for just stat_check_basin.sh
 echo State binning data...
 cd step3_state_bin
-fe_state_bin_monthly.sh ../step2_range_check/good.all.hb.nofill.rchk1
+#fe_state_bin_monthly.sh ../step2_range_check/good.all.hb.nofill.rchk1
 cd ..
 
 #===========================
@@ -54,7 +67,8 @@ cd ..
 
 echo TS checking data...
 cd step4_ts_check
-ls
+#stat_check_basin.sh ../step2_range_check/good.all.hb.nofill.rchk1 ../step3_state_bin/good.all.hb.nofill.rchk1.stb schk1
+stat_check_basin.sh ../step2_range_check/good.all.hb.nofill.rchk1 ../step2_range_check/good.all.hb.nofill.rchk1 schk1
 cd ..
 
 #===========================
@@ -64,15 +78,17 @@ cd ..
 echo Looping over range check, state binning, and ts check...
 
 cd step2_range_check
-ls
+range_check_basin.sh ../step4_ts_check/good.all.hb.nofill.rchk1.schk1 rchk2
 cd ..
 
 cd step3_state_bin
-ls
+#fe_state_bin_monthly.sh ../step2_range_check/good.all.hb.nofill.rchk1.schk1.rchk2
 cd ..
 
 cd step4_ts_check
-ls
+#stat_check_basin.sh ../step2_range_check/good.all.hb.nofill.rchk1.schk1.rchk2 ../step3_state_bin/good.all.hb.nofill.rchk1.schk1.rchk2.stb schk2
+
+stat_check_basin.sh ../step2_range_check/good.all.hb.nofill.rchk1.schk1.rchk2 ../step2_range_check/good.all.hb.nofill.rchk1.schk1.rchk2 schk2
 cd ..
 
 #===========================
