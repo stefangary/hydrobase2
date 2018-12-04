@@ -33,6 +33,9 @@
 # of the GNU LGPL v3 or later.
 #---------------------------------------------
 
+# Define the location of the hydrobase install dir
+set hb2_dir = /usr/local/hb2/bin
+
 # Define the hydrobase files to input
 
 ##############################
@@ -52,14 +55,30 @@
 ########## PASS 2 ############
 ##############################
 # Raw data to be filtered
-set rawfile = ../step2a_range_check/archive_pass2/all.espna.nf.1950to2015.ge200.hb.rchk2_schk1
+#set rawfile = ../step2a_range_check/archive_pass2/all.espna.nf.1950to2015.ge200.hb.rchk2_schk1
 
 # Data to set the envelope of variability
-set smofile = ../step2b_state_bin/archive_pass2/all.espna.nf.1950to2015.ge200.hb.rchk2_schk1.stb
+#set smofile = ../step2b_state_bin/archive_pass2/all.espna.nf.1950to2015.ge200.hb.rchk2_schk1.stb
 
 # Define the output filename
-set outfile = all.espna.nf.1950to2015.ge200.hb.rchk2_schk2
-set badfile = all.espna.nf.1950to2015.ge200.hb.rchk2_schk2.bad
+#set outfile = all.espna.nf.1950to2015.ge200.hb.rchk2_schk2
+#set badfile = all.espna.nf.1950to2015.ge200.hb.rchk2_schk2.bad
+
+##############################
+#####AUTOMATED INPUTS#########
+##############################
+
+# Raw data to be filtered
+set rawfile = $1
+
+# Data to set the envelope of variability
+set smofile = $2
+
+# Define the output file name
+set bn = `basename ${rawfile}`
+set runid = $3
+set outfile = ${bn}.${runid}
+set badfile = ${bn}.${runid}.bad
 
 ##############################
 ##############################
@@ -94,9 +113,9 @@ endif
 mkdir ${msdir}
 
 # Split the input files into 1 degree squares
-hb_mssort $smofile -S1 -O${msdir} -N.smo.hb > log_ms5.smo
+${hb2_dir}/hb_mssort $smofile -S1 -O${msdir} -N.smo.hb > log_ms5.smo
 rm -f ./${msdir}/msextra.dat
-hb_mssort $rawfile -S1 -O${msdir} -N.raw.hb > log_ms5.raw
+${hb2_dir}/hb_mssort $rawfile -S1 -O${msdir} -N.raw.hb > log_ms5.raw
 rm -f ./${msdir}/msextra.dat
 
 # Check that the same number of squares are represented.
@@ -124,8 +143,8 @@ foreach msfile ( ./${msdir}/*.smo.hb )
     # Get the basename of this ms file.
     set msnum = `basename $msfile .smo.hb`
 
-    @ nstations_smo = `hb_countsta $msfile`
-    @ nstations_raw = `hb_countsta ./${msdir}/${msnum}.raw.hb`
+    @ nstations_smo = `${hb2_dir}/hb_countsta $msfile`
+    @ nstations_raw = `${hb2_dir}/hb_countsta ./${msdir}/${msnum}.raw.hb`
 
     echo '-----------------------------------------------'
     echo Square ${msnum} has ${nstations_smo} smo, ${nstations_raw} raw sta.
@@ -141,10 +160,10 @@ foreach msfile ( ./${msdir}/*.smo.hb )
 	echo '-----------------------------------------------'
     else
 	# Compute the statistical envelope around the TS curve.
-	hb_statfit_ts $msfile -Ostats_tmp.txt -Ssigbins.txt -Pfit_tmp
+	${hb2_dir}/hb_statfit_ts $msfile -Ostats_tmp.txt -Ssigbins.txt -Pfit_tmp
 
 	# Filter scans based on statistical envelope.
-	hb_statchk_ts -I./${msdir}/${msnum}.raw.hb -Oout_tmp.hb -Sstats_tmp.txt -N2.3 -Q20.0 -Pchk_tmp -Bbad_tmp.hb
+	${hb2_dir}/hb_statchk_ts -I./${msdir}/${msnum}.raw.hb -Oout_tmp.hb -Sstats_tmp.txt -N2.3 -Q20.0 -Pchk_tmp -Bbad_tmp.hb
 
 	# Use GMT to make diagnostic/documentation plots.
 	statplo.sh chk_tmp fit_tmp ts_${msnum}.pdf

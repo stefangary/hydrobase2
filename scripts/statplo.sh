@@ -16,6 +16,9 @@
 # of the GNU LGPL v3 or later.
 #-----------------------------------------
 
+# Set HB install directory
+set hb2_dir = /usr/local/hb2/bin
+
 # Set a temporary filename for the
 # postscript output.
 set outps = out.ps
@@ -39,9 +42,9 @@ set tinc = `gmtmath -Q $tmax $tmin SUB 50 DIV =`
 #set sinc = 0.1
 
 # Make sigma basemap(s).
-hb_sigbasemap -Osig0basemap.xyz -T/${trange}/${tinc} -S/${srange}/${sinc} -P0.0
-hb_sigbasemap -Osig2basemap.xyz -T/${trange}/${tinc} -S/${srange}/${sinc} -P2000.0
-hb_sigbasemap -Osig4basemap.xyz -T/${trange}/${tinc} -S/${srange}/${sinc} -P4000.0
+${hb2_dir}/hb_sigbasemap -Osig0basemap.xyz -T/${trange}/${tinc} -S/${srange}/${sinc} -P0.0
+${hb2_dir}/hb_sigbasemap -Osig2basemap.xyz -T/${trange}/${tinc} -S/${srange}/${sinc} -P2000.0
+${hb2_dir}/hb_sigbasemap -Osig4basemap.xyz -T/${trange}/${tinc} -S/${srange}/${sinc} -P4000.0
 
 # Define contour intervals.
 makecpt -Crainbow -T18.0/26.5/0.5 > sig0.cpt

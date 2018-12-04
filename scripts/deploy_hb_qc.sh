@@ -34,14 +34,11 @@ cd scripts
 # Make directories.
 # Note that state binning depends on HB3 (not just HB2)
 # but, if skipped, the rest of the pipeline resides in
-# just HB2.  The p1 directory will be where the first
-# pass of the QC is stored (and then kept out of the main
-# part of the pipeline).  One could generalize this to
-# multiple, n, passes if you wanted.
+# just HB2.
 mkdir -p ${base_hb_qc_dir}/step1_import
-mkdir -p ${base_hb_qc_dir}/step2_range_check/p1
-mkdir -p ${base_hb_qc_dir}/step3_state_bin/p1
-mkdir -p ${base_hb_qc_dir}/step4_ts_check/p1
+mkdir -p ${base_hb_qc_dir}/step2_range_check
+mkdir -p ${base_hb_qc_dir}/step3_state_bin
+mkdir -p ${base_hb_qc_dir}/step4_ts_check
 
 # Copy scripts into the directories.
 # Any modifications to the local scripts
