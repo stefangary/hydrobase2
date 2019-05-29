@@ -283,7 +283,7 @@ main(int argc, char **argv) {
   if (startlon > lonmax) lonmax = startlon;
   if (startlon < lonmin) lonmin = startlon;
 
-  fprintf(stderr,"hb_slice got first point in slice path.\n");
+  fprintf(stderr,"hb_slice got first point in slice path.");
 
   /*--------------------------------------------*/    
   /* Get consecutive points, construct an array
@@ -451,7 +451,7 @@ main(int argc, char **argv) {
     point[npoints].type = 2;
     ++npoints;
     
-    fprintf(stderr,"hb_slice got next point in slice path.\n");
+    fprintf(stderr,"hb_slice got next point in slice path.");
 
     /* sort the array of points in order by increasing dist from startpoint */
     
@@ -480,7 +480,7 @@ main(int argc, char **argv) {
   
   point = get_memory((void *)point, (size_t)npoints, sizeof(struct POS_REC));
   
-  fprintf(stderr,"hb_slice done creating pathway.\n");
+  fprintf(stderr,"hb_slice done creating pathway.");
 
   /*--------------------------------------------*/    
   /*        end of defining pathway */
@@ -492,22 +492,21 @@ main(int argc, char **argv) {
     fprintf(stderr,"Dateline is crossed:  converting longitudes 0 -> 360");
   }
   
-  /*  For each point along pathway, obtain a profile from cdf files */
-  fprintf(stderr,"hb_slice starting to get data from cdf file...\n");
-  
+  /*  for each point along pathway, obtain a profile from cdf files */
+
+  fprintf(stderr,"hb_slice starting to get data from cdf file.");
+
   for (i = 0; i < npoints; ++i) {
-
+    
     iflag = get_profile(&point[i], nfiles, argv, dir, extent, &hdr, &data);
-
-    if ( iflag ) {
-
-      /* Got valid data so write it to output file. */
+    
+    if (iflag ) {
+      
       if (hdr.nobs > 0) {
 	compute_props(&hdr, &data);
 	write_hydro_station(outfile, &hdr, &data);
       }
-
-      /* Deallocate memory */
+      
       free((void *)hdr.prop_id);
       for (n = 0; n < MAXPROP; ++n) {
 	if (data.observ[n] != NULL) {
@@ -517,9 +516,9 @@ main(int argc, char **argv) {
       }
     }
   } /* end for i */
-
-  fprintf(stderr,"\nhb_slice done looping over each profile point.");
   
+  fprintf(stderr,"hb_slice done looping over each profile point.");
+
   fprintf(stderr,"\n\nEnd of %s\n", argv[0]);
   exit(0);
 }  /* end main */
@@ -620,7 +619,7 @@ int parse_p_option(char *st)
   
 
   return (nprops);
-}  /* end parse_p_option() */
+}  /* end parse_prop_list() */
 /***************************************************************************/
 int compare_points(const void *pt1, const void *pt2)
    /* Routine for qsort to sort structure by its .dist field.
@@ -755,7 +754,7 @@ int get_profile(struct POS_REC *pos, int nfiles, char **arglist, char *dir, char
    
    
    flag = (double) -8.9;
-
+   
    if (xdateline) {      /* ensure longitude range 0 -> 360 */
       if (pos->lon < 0)
          pos->lon += 360.0;
@@ -764,11 +763,11 @@ int get_profile(struct POS_REC *pos, int nfiles, char **arglist, char *dir, char
       if (pos->lon > 180.)
          pos->lon -= 360.0;
    }
-
+      
    hptr->lat = (float) pos->lat;
    hptr->lon = (float) pos->lon;
    hptr->ms10 = ms10(hptr->lat, hptr->lon, &hptr->ms1);
-
+   
    do {
    
       cdfid = cdf_open(dir, arglist[curfile], extent, print_msg);
@@ -781,44 +780,20 @@ int get_profile(struct POS_REC *pos, int nfiles, char **arglist, char *dir, char
          cdf_close(cdfid);
       
    }  while (!found && curfile++ < nfiles);
+   
+   if (!found)   
+      return (0);
 
-   if (!found) {
-     /* SFG added brackets and fprintf. */
-     fprintf(stderr,"Profile not found, skipping!");
-     return (0);
-   }
  /*  utilize this point ...	  */
  
    hptr->nprops = load_properties(cdfid, &cdf, dptr, hptr->lat, hptr->lon);
    
    hptr->prop_id = (int *) calloc((size_t)hptr->nprops, sizeof(int));
-   
-   /* Now that the prop_id vector is allocated, it must
-    * be populated.  First initialize a counter for the
-    * number of active properties, n.*/
    n = 0;
    for (i = 0; i < MAXPROP; ++i) {
-     if (dptr->observ[i] != NULL){
-       hptr->prop_id[n++] = i;
-	/* For the case where there is space allocated for this property,
-	 * simultaneously augment the number of active properties
-	 * and set the property id in the header. For locations where
-	 * there is no data then only depth and pressure can be set.
-	 * SFG added brackets after the if() above and below the fprints
-	 * below and this changes the execution behavior! Otherwise, this
-	 * loop counted n up to MAXPROP, but it should not have.*/
-
-	 /* Commented out for less verbosity.*/
-	 fprintf(stderr,"\nDebug: setting prop_id = %d",i);
-	 fprintf(stderr,"\nDebug: setting n count = %d",n);
-     }
+      if (dptr->observ[i] != NULL) 
+         hptr->prop_id[n++] = i;
    } 
-
-   /* Spit out the hptr->prop_id to verify correct ordering. */
-   for ( i = 0; i < hptr->nprops; ++i) {
-     fprintf(stderr,"\nIndex %d prop_id %d",i,hptr->prop_id[i]);
-   }
-
    
    nz = cdf.nz; 
     
@@ -965,113 +940,38 @@ int get_profile(struct POS_REC *pos, int nfiles, char **arglist, char *dir, char
 	}
 	 
    }  /* end if dist > 2 */
-
+   
    cdf_close(cdfid);
-
-   /* Prepare station for output.
-    * Define an index property to check for
-    * missing data.  We don't want it to be
-    * pressure or depth. */
+	      
+    /* Prepare station for output.
+       Define an index property to check for missing data */
    i = 0;
    ip = hptr->prop_id[i];
-
-   /*
-   fprintf(stderr,"Debug: ip = %d\n",ip);
-   fprintf(stderr,"Debug: hptr->nprops = %d\n",hptr->nprops);
-   */
-   
-   /* Depth and pressure are at index values 0 and 1,
-    * respectively, so this while loop will skip over
-    * either of those two with the continue so that
-    * a non-pressure or non-depth variable can be found.
-    * The problem with this loop is that if only depth
-    * and pressure are available in this profile
-    * (empty profile) then the loop will overrun and
-    * eventually pick up a spurious value for ip in
-    * whatever happens to be in memory at
-    * hptr->prop_id[i]. Instead,
-    * we need to stop the while loop explicitly.*/
-   while ( (ip == (int)DE) || (ip == (int)PR) ) {
-     fprintf(stderr,"Debug: i = %d\n",i);
-     
-     /* Increment a counter and test that it is equal
-      * to the number of properties in this station.
-      * If this happens, we should exit the loop, but
-      * here it just continues the loop to the next
-      * iteration.  So the fix is here.  I comment
-      * out the continue and replace it with a check
-      * for whether anything other than DE and PR
-      * has been found.
-      * If it is not equal to the number of properties,
-      * skip to top of the loop.*/
-     if (++i == hptr->nprops) {
-       /* SFG
-       continue;
-       */
-
-       /* We should end this loop as we're
-	* about to overrun the data otherwise.
-	* Get whatever index we have. */
+    while ((ip == (int)DE) || (ip == (int)PR) ) {
+       if (++i == hptr->nprops)
+           continue;
        ip = hptr->prop_id[i];
-
-       /* Check if that index is still DE or PR
-	* and if it is, then we return(0) to
-	* mark an empty profile.*/
-       if ( (ip == (int)DE) || (ip == (int)PR) ) {
-	 fprintf(stderr,"Cannot find any variables other than DE and PR. Skipping!");
-	 return(0);
-       } else {
-	 break;
-       }  
-     }
-     /* SFG added the brackets around the if() {} above.
-      * Counter should not overrun nprops. The goal is
-      * to just skip over DE and PR and get to the first
-      * active property.*/
-     
-      
-     /* We still have some properties to scan through,
-      * set ip to the next property id in the list.
-      * We are left with the ID of the last property
-      * in the station.  The current problem is that
-      * this value is being set to 49, which is beyond
-      * the maximum allowed number of properties, so
-      * below we throw a seg. fault because there's no
-      * allocated space.*/
-     ip = hptr->prop_id[i];
-     
-     fprintf(stderr,"Debug: ip = %d\n",ip);
-   }
-
-   /* Remove flagged levels from data arrays */    
-   n = 0;
-
-   fprintf(stderr,"\n Debug: n = %d\n",n);
-   fprintf(stderr,"Debug: nz = %d\n",nz);
-   fprintf(stderr,"Debug: ip = %d\n",ip);
-   
-    for (j = 0; j < nz; ++j) {
-
-      /* Check over each depth level for a bad value. */
-      if (dptr->observ[ip][j] > flag) {
-
-	/* For good values, copy over the good data and
-	 * augment a the good data counter (here, n). */
-	for (i = 0; i < hptr->nprops; ++i) {
-	  dptr->observ[hptr->prop_id[i]][n] = dptr->observ[hptr->prop_id[i]][j];
-	}
-	++n;
-      }
-
-      /* Bad values are simply skipped. */
     }
-
-    hptr->nobs = n;
-    hptr->pdr = dptr->observ[(int)DE][n-1] + 10;  
-    dptr->nobs = n;
-    dptr->nprops = hptr->nprops;
-
-    return (1);
+      
+    /* Remove flagged levels from data arrays */
+    
+   n = 0;
+   
+   for (j = 0; j < nz; ++j) { 
+      if (dptr->observ[ip][j] > flag) { 
+         for (i = 0; i < hptr->nprops; ++i) {
+           dptr->observ[hptr->prop_id[i]][n] = dptr->observ[hptr->prop_id[i]][j];
+         }
+	 ++n;
+      } 
+   }
+   
+   hptr->nobs = n;
+   hptr->pdr = dptr->observ[(int)DE][n-1] + 10;  
+   dptr->nobs = n;
+   dptr->nprops = hptr->nprops;
+   
+   return (1);
 } /* end get_profile() */
 
 /****************************************************************************/
@@ -1150,16 +1050,8 @@ int load_properties(int cdfid, struct CDF_HDR *cdfptr, struct HYDRO_DATA *dptr, 
    
   prop_avail = (int *) calloc((size_t)MAXPROP, sizeof(int));	
 
-  /*
-  fprintf(stderr,"\nDebug: cdfptr->nprops = %d",cdfptr->nprops);
-  */
-  
   for (i = 0; i < cdfptr->nprops; ++i) {
     prop_avail[get_prop_indx(cdfptr->prop_id[i])] = 1;
-
-    /*
-    fprintf(stderr,"\nDebug: cdfptr->prop_id[i] = %s",cdfptr->prop_id[i]);
-    */
   }
   
   get_indices(cdfptr, lat, lon, &row, &col);
@@ -1176,6 +1068,9 @@ int load_properties(int cdfid, struct CDF_HDR *cdfptr, struct HYDRO_DATA *dptr, 
   }
   
   nprops = 1;
+  
+
+  
   for (i=0; i < MAXPROP; ++i) {
     if (prop_avail[i] && (prop_req[i] || prop_needed[i])) {
        free_and_alloc(&dptr->observ[i], n);
@@ -1185,8 +1080,6 @@ int load_properties(int cdfid, struct CDF_HDR *cdfptr, struct HYDRO_DATA *dptr, 
            if (is_flagged(x[j], cdfptr->fill_value) || is_flagged(x[j], (float) HBMASK))
 	        x[j] = (float) HBEMPTY;
            dptr->observ[i][j] = (double) x[j];
-
-	   fprintf(stderr,"\n%s data value = %f",cdfptr->prop_id[nprops],dptr->observ[i][j]);
        } 
        ++nprops;      
     }

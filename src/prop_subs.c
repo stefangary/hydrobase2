@@ -531,7 +531,7 @@ int get_prop_indx(char *str)
               case '4':
                  return ((int) S4);
               default:
-                 return error;
+		return (error);
             } /* end switch */
             break;
       case 'T':
@@ -553,7 +553,7 @@ int get_prop_indx(char *str)
 	      case 'z' :
 		 return ((int) TZ);
               default:
-                 return error;
+		return (error);
             } /* end switch */
             break;
       case 'V':
@@ -572,12 +572,12 @@ int get_prop_indx(char *str)
                case 's' :
                    return ((int) VS);  
               default:
-                 return error;
+		return(error);
             } /* end switch */
             break;
 
       default:
-            return error;
+	return(error);
    } /* end switch */
 } /* end get_prop_indx() */
 

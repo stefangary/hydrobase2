@@ -627,7 +627,11 @@ int read_cdf_hdr(int cdfid, struct CDF_HDR *haddr)
    for (varid = 0; varid < nvars; ++varid) {
 
       error = nc_inq_varname(cdfid, varid, varname);
-
+      
+      /*
+      fprintf(stderr,"\nFound variable %s",varname);
+      */
+      
       found = 0;
       i = 0;
       while ((!found) && (i < MAXPROP)) {   /* Is it a property? */
@@ -636,8 +640,10 @@ int read_cdf_hdr(int cdfid, struct CDF_HDR *haddr)
       }
 
       if (found) {           
-
-         if (strncmp(mne, "de", 2) == 0) {       /* for depth, just get units */
+	/*
+	  fprintf(stderr,"\nFound %s",mne);
+	*/  
+	if (strncmp(mne, "de", 2) == 0) {       /* for depth, just get units */
             error = nc_get_att_text(cdfid, varid, "units", haddr->z_units);
          }
          else {
