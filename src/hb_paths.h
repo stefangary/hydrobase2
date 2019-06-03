@@ -13,5 +13,8 @@ For BATHPATH, use the file topo.onetenthdeg.swap.dat if you are installing on a 
 
 */
 
-#define GAMMA_NC_PATH "/home/sa03sg/src/HB2/lib/gamma.nc"
-#define BATHPATH "/home/sa03sg/src/HB2/lib/topo.onetenthdeg.swap.dat"
+/* Here we use the default locations of where the
+ * files go for the default installation via the makefile.*/
+
+#define GAMMA_NC_PATH "/usr/local/hb2/lib/gamma.nc"
+#define BATHPATH "/usr/local/hb2/lib/topo.onetenthdeg.swap.dat"

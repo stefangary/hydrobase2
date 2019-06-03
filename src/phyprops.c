@@ -54,7 +54,10 @@
 .    		grav acceleration at latitude (cm/sec**2)
 .
 .  	double hb_coriol(double xlat)
-.    		coriolus parameter from latitude
+.    		coriolis parameter from latitude
+.
+.  	double hb_beta_plane(double xlat)
+.    		beta plane parameter from latitude, df/dy
 .
 . 	double hb_linterp(double xval, double *x, double *y,int npts)
 .    		linearly interpolates to find the position of xval in array x
@@ -905,4 +908,21 @@ double hb_coriol(double xlat)
 
     plat = fabs(xlat * PI / 180.);
     return (14.5842e-5 * sin(plat));
+}
+/*********************************************************/
+/*********************************************************/
+double hb_beta_plane(double xlat)
+/*********************************************************/
+/*  Beta plane parameter as a function of latitude in sec^-1 m^-1 */
+{
+    double plat;
+
+    /* Convert to radians. */
+    plat = fabs(xlat * PI / 180.);
+
+    /* Same as Coriolis parameter, except
+     * need to change sin to cos for dsin(theta)/dtheta
+     * and then chain rule multiply by dtheta/dy =
+     * d/dy of (arc length/Raduis of earth). */
+    return ((14.5842e-5 * cos(plat))/6.371e6);
 }

@@ -27,6 +27,9 @@ set base_hb_qc_dir = $1
 echo Setting up HB QC directories in ${base_hb_qc_dir}...
 
 # Get directory of hydrobase installation
+# assuming we are launching this script
+# from the scripts directory of the
+# hydrobase2 folder cloned from github.
 cd ..
 set hb_dir = `pwd`
 cd scripts
