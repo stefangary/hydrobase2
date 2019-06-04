@@ -125,9 +125,10 @@
 /*************************************************************************/
 #include <stdio.h>
 #include <stdlib.h>
-
+#include <math.h>
 #define PROP_SUBS 1
 #include "hydrobase.h"
+#define PI 3.141592654
 
 /*************************************************************************/
 /*************************************************************************/
@@ -174,7 +175,8 @@ char *prop_mne[MAXPROP] =  { "pr",
 			     "vs",
 			     "dr",
 			     "al",
-			     "be"
+			     "be",
+			     "rr"
 };
 
 char *prop_descrip[MAXPROP] = { "pressure",
@@ -217,7 +219,8 @@ char *prop_descrip[MAXPROP] = { "pressure",
 				"sound velocity",
 				"density ratio",
 				"thermal expansion",
-				"haline contraction"
+				"haline contraction",
+				"APPROX. Rossby radius of def."
 } ;
 
 char *prop_units[MAXPROP] = { "dbars",
@@ -260,7 +263,8 @@ char *prop_units[MAXPROP] = { "dbars",
                               "m/sec",
 			      "",
 			      "10**7 alpha",
-			      "10**7 beta"
+			      "10**7 beta",
+			      "meters"
 };
 
 int field_width[MAXPROP] = {     
@@ -303,8 +307,9 @@ int field_width[MAXPROP] = {
                                  9, /* ve */
                                  9,  /* vs */
 				 8,  /* dr */
-				 9, /* al*/
-				 9  /*be */
+				 9, /* al */
+				 9, /* be */
+				 9  /* rr */
 };
 
 int field_precis[MAXPROP] =  {   
@@ -348,7 +353,8 @@ int field_precis[MAXPROP] =  {
 				 3, /* vs */
 				 4, /* dr */
 				 1, /* al */
-				 1 /* be */
+				 1, /* be */
+				 1  /* rr */
 };
 
 /******************************************************/
@@ -500,6 +506,16 @@ int get_prop_indx(char *str)
                case '4':
                    return ((int) P4);  
                default:      
+                   return (error);
+             } 
+            break;
+      case 'R':
+      case 'r':
+            switch (*(++s)) {
+               case 'R':
+               case 'r':
+                   return ((int) RR);  
+              default:      
                    return (error);
              } 
             break;
@@ -1089,6 +1105,226 @@ void compute_htdz_over_f(int nobs, double *d, double *p, double *t, double *s, d
    return;
       
 } /* end compute_htdz_over_f() */
+
+/****************************************************************************/
+void compute_approx_rossby_radius(double *ro, int nobs, int pdr, double *d, double *p, double *t, double *s, double lat, int window, int w_incr)
+
+/* computes the Rossby radius of deformation using equations 2.2 and 2.3ab
+ * in Chelton et al. (1998), which is an APPROXIMATE method and, on average,
+ * biased high by about 6.5% according to their results.  This is
+ * copied from compute_htdz_over_f since
+ * the core of this calculation is depth integrated buoyancy frequency.
+ * 
+ * Note that a key difference in the integration here
+ * compared to dynamic height integrations is that we
+ * are only interested in integrating from the bottom
+ * to the surface, not from a specified reference depth.
+ * This is why there is no pref in the function.
+ *
+ * The units are :  
+ * Rossby radius, ro: meters
+ * spec vol anomaly  :  1e-8 * m**3/kg
+ * pressure  :  dbars = 1e4 N/m**2 = 1e4 kg/m s**2
+ *
+ * If a vertical datagap is encountered, 
+ * no height is computed beneath that level
+ */
+{
+  int j, start, i, datagap;
+  double f, beta;
+  double sva1, sva0, sig, last_n, last_ro, last_d, last_p;
+  double *n;
+
+  /* Check that pdr is deeper than the deepest measurement. */
+  if (d[nobs-1] > pdr) {
+    fprintf(stderr,"\ncompute_approx_rossby_radius ERROR: Deepest obs deeper than seafloor.");
+    fprintf(stderr,"\ncompute_approx_rossby_radius ERROR: hb_update_pdr needs to be run first.");
+    /* Return missing values. */    
+    for (i = 0; i < nobs; ++i) {
+      ro[i] = HB_MISSING;
+    }
+    return;
+  }
+  
+  /*===============================================
+   * First find the depth of the water column and
+   * the depth of the deepest measurement.  If the
+   * discrepancy is bigger than a data gap, we return
+   * a bunch of missing values.  An alternative could
+   * be to project uniform properties to the bottom,
+   * but we hold off on that extrapolation for now.
+   * Or, we could just ignore any data gaps and allow
+   * for the integration to continue, regardless.
+   * However, ignoring data gaps can result in
+   * a few really bad values (i.e. a shallow profile
+   * in deep water that happens to have very high
+   * stratification.  The buoyacy frequency that will be
+   * used in this case is based only on the upper
+   * waters, not the waters at depth, which will be
+   * completely unrepresentative of the integrated
+   * value along the whole profile.
+   */
+
+  if (d[nobs-1] < GAP_CHANGE_DEPTH){
+    datagap = ( pdr - d[nobs-1]) > GAP_SHALLOW;
+    fprintf(stderr,"\ncompute_approx_rossby_radius WARNING: GAP_SHALLOW detected at bottom!");
+  }
+  else{
+    datagap = ( pdr - d[nobs-1]) > GAP_DEEP;
+    fprintf(stderr,"\ncompute_approx_rossby_radius WARNING: GAP_DEEP detected at bottom!");
+  }
+
+  if (datagap) {
+    for (i = 0; i < nobs; ++i) {
+      ro[i] = HB_MISSING;
+    }
+    return;
+  }   
+  
+  /*================================================
+   * Compute the buoyancy frequency
+   */
+   n = (double *)malloc(sizeof(double)*nobs); 
+   buoy_freq(n,p,t,s,nobs,window,w_incr);
+
+   /* Force the removal of any density inversions
+    * by changing any negative values to zero.
+    * Note, if we just check for < 0, it will
+    * lose memory of any values set to HB_MISSING,
+    * so keep those. */
+   for (j = start-1; j >= 0; --j) {
+     if ( n[j] < 0.0 ) {
+       if ( n[j] == HB_MISSING ) {
+       /* Leave the HB_MISSING value */
+       }
+       else{
+	 n[j] = 0.0;
+       }
+     }
+   }
+
+   /* If the bottom value of the profile is missing,
+    * we cannot start the integration, so exit. */
+   if ( n[nobs-1] == HB_MISSING ) {
+     fprintf(stderr,"\ncompute_approx_rossby_radius WARNING: HB_MISSING detected at deepest observation!");
+      /* Return missing values. */    
+      for (i = 0; i < nobs; ++i) {
+        ro[i] = HB_MISSING;
+      }
+      return;
+   }
+   
+  /*=================================================
+   * Set up the integration
+   */
+
+   /* We always start from the bottom.*/
+   start = nobs-1;
+   
+   /* Determine height between the bottom and the first pr level above.
+    * The 0.5 factor is a 1/2 to average the value at the first
+    * observation level and the bottom.  We assume N = 0 at the
+    * bottom.  This is trapezoidal integration.*/   
+   ro[start] = 0.0;
+   if (start >= 0) {
+      ro[start] = (0.0 + n[start])*0.5*(pdr - d[start]);
+   }
+   last_ro = ro[start];
+   last_n = n[start];
+   last_d = d[start];
+   last_p = p[start];
+
+   /* now integrate upward through the station, check for missing values
+      and for vertical datagaps ... */
+
+   for (j = start-1; j >= 0; --j) {
+     /* Any negative values of n[j] here are HB_MISSING,
+      * not density inversions as this was explicitly checked above.
+      * Note that if this HB_MISSING value is inserted, the last_
+      * values are NOT updated meaning that the integration will
+      * just jump over this missing value, provided that the data
+      * gap is not too big.*/
+      if (s[j] < -8. || t[j] < -8. || p[j] < -8. || n[j] < -8. || d[j] < -8. ) {
+         ro[j] = HB_MISSING;
+	 /*fprintf(stderr,"\ncompute_approx_rossby_radius WARNING: non-sane value!");*/
+         continue;
+      }
+
+      if (p[j] < GAP_CHANGE_DEPTH)
+        datagap = ( last_p - p[j]) > GAP_SHALLOW;
+      else
+        datagap = ( last_p - p[j]) > GAP_DEEP;
+
+      if (datagap) {
+        /* Allow INTERNAL data gaps for now. */
+        ro[j] = HB_MISSING;
+
+	/* REMOVE THE ABOVE LINE AND ACTIVATE THE
+	 * lines below for data gap filtering.
+        for (i= j; i >= 0; --i) {
+          ro[i] = HB_MISSING;
+	  fprintf(stderr,"\ncompute_approx_rossby_radius WARNING: gap detected while integrating up!");
+        }
+        j = 0;  /* don't bother integrating upward any farther */
+      }
+      else {
+        ro[j] = last_ro + ((last_n + n[j])*0.5*(last_d - d[j]));
+        last_n = n[j];
+	last_ro = ro[j];
+        last_d = d[j];
+	last_p = p[j];
+      }
+   } /* end for */
+
+   /*==========================================================
+    * Done integrating upward, no need to integrate downward.
+    */
+   
+   /*==============================================================
+    * Sanity check - if surface value is less than zero, there was
+    * a massive density inversion.  Report missing values.
+    */
+   if ( ro[0] < 0 ) {
+     fprintf(stderr,"\ncompute_approx_rossby_radius WARNING: Massive density inversion detected!");
+     for (i = 0; i < nobs; ++i) {
+       ro[i] = HB_MISSING;
+     }
+     return;
+   }
+   
+   /*==========================================================
+    * Final step: divide all values by Coriolis parameter
+    * or beta plane, depending on the latitude.
+    * Can manually change f to 1 or other orders of magnitude for
+    * checking the accuracy of the integration.
+    */
+   if ( lat > 5. ) {
+     /* Use Eq. 2.3a */
+     f = hb_coriol(lat);
+     /*fprintf(stderr,"\n Coriolis parameter is %20.10e\n",f);*/
+
+     for (i=0; i < nobs; ++i) {
+       if ( ro[i] != HB_MISSING ) {
+	 ro[i] = ro[i]/(f*PI);
+       }
+     }
+     
+   }
+   else {
+     /* Use Eq. 2.3b */
+     beta = hb_beta_plane(lat);
+     /*fprintf(stderr,"\n Beta plane parameter is %20.10e\n",beta);*/
+
+     for (i=0; i < nobs; ++i) {
+       if ( ro[i] != HB_MISSING ) {
+	 ro[i] = sqrt(ro[i]/(2*beta));
+       }
+     }
+   }
+
+   return;
+      
+} /* end compute_approx_rossby_radius() */
 
 /****************************************************************************/
 void compute_energy(int nobs, double *p, double *t, double *s, double pref, double *chi)

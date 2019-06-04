@@ -16,6 +16,7 @@ NETCDFLIB = /usr/local/netcdf3/lib
 NETCDFINC = /usr/local/netcdf3/include
 #BINDIR = ../bin
 BINDIR = /usr/local/hb2/bin
+LIBDIR = /usr/local/hb2/lib
 #
 #-----------------------------------------------------------------------------
 DEBUG=  # set to -g to turn on debugging and set OPTIMIZE to a blank
@@ -73,6 +74,10 @@ other:          $(OTHER)
 install:	hydrobase 
 	chmod 755 $(PROGRAMS)
 	mv $(PROGRAMS) $(BINDIR)
+	mkdir -p $(LIBDIR)
+	cp ../lib/topo.onetenthdeg.* $(LIBDIR)
+	cp ../lib/gamma.nc $(LIBDIR)
+	cp ../lib/shipcodes*.asc $(LIBDIR)
 #
 install_qc:	qc 
 	chmod 755 $(QC)

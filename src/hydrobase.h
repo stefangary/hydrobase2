@@ -18,8 +18,8 @@
 /** Definitions for HydroBase structures and supported properties **/
 /** Additional property definitions (such as names, units, and field
  ** writing information are in prop_subs.c **/
-#define  MAXPROP  41
-enum property { PR, DE, TE, TH, TP, TZ, HC, SA, OX, O2, N2, N3, P4, SI, HT, IH, PE, S0, S1, S2, S3, S4, S_, SD, BF, PV, SV, VA, F1, F2, F3, HE, TU, GN, GE, VN, VE, VS, DR, AL, BE };
+#define  MAXPROP  42
+enum property { PR, DE, TE, TH, TP, TZ, HC, SA, OX, O2, N2, N3, P4, SI, HT, IH, PE, S0, S1, S2, S3, S4, S_, SD, BF, PV, SV, VA, F1, F2, F3, HE, TU, GN, GE, VN, VE, VS, DR, AL, BE, RR };
 
 #define    NBHEAD    76      /* # of bytes in header including LF */
 #define    NBSEP      3      /* # of bytes separating stations incl LF */
