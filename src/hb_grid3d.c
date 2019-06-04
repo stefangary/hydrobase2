@@ -84,7 +84,7 @@ double mix_layer_def;      /* option to specify mixed layer definition */
 float lengthscale;         /* L for weight function = e^[-(d/L)^2] */
 
 /* Global variables used in computing potential vorticity. */
-
+double dlat;
 float latitude, longitude;
 int window, w_incr;     /* used to specify pr window for vertical
                          * gradient properties*/
@@ -630,7 +630,15 @@ int main (int argc, char **argv) {
                     sta.observ[(int)PV][j] *= sta.observ[(int)PV][j];
                   po_vort(sta.observ[(int)PV],sta.observ[(int)PV], hdr.nobs, (double)hdr.lat);
                   break;
+		  
+               case RR:
+                  free_and_alloc(&sta.observ[(int)RR], hdr.nobs);
+		  dlat = (double) hdr.lat;
+		  compute_approx_rossby_radius(sta.observ[i], hdr.nobs, hdr.pdr, sta.observ[(int)DE], sta.observ[(int)PR], sta.observ[(int)TE], sta.observ[(int)SA], dlat, window, w_incr);
+                  break;
 
+
+		  
                default:
 		   /* Default checks if the property is available
 		    * and if it is not, overrides the prop_avail=1

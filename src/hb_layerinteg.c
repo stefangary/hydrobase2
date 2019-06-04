@@ -870,7 +870,13 @@ double *xptr, *xxptr;
                po_vort(xptr, xptr, n, dlat);
 
                break;
-               
+
+       case RR:
+	 fprintf(stderr,"\nhb_layerinteg: ERROR: Approx. Rossby radius not relevant here!");
+               free(xptr);
+               xptr = NULL;
+               break;
+		 
        case BF:
                buoy_freq(xptr, pptr, tptr, sptr, n, window, w_incr);
                for (j = 0; j < n; ++j) {

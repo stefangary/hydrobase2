@@ -967,6 +967,12 @@ void get_hydro_data(int file, struct surface *listptr) {
                compute_height(hdr.nobs, station.observ[(int)PR], station.observ[(int)TE],station.observ[(int)SA], ht_pref, station.observ[i]);
                break;
 
+	     case RR:
+	       free_and_alloc(&station.observ[i], hdr.nobs);
+	       dlat = (double) hdr.lat;
+	       compute_approx_rossby_radius(station.observ[i], hdr.nobs, hdr.pdr, station.observ[(int)DE], station.observ[(int)PR], station.observ[(int)TE], station.observ[(int)SA], dlat, window, w_incr);
+               break;
+	       
 	     case IH:
 	       free_and_alloc(&station.observ[i], hdr.nobs);
                compute_htdz_over_f(hdr.nobs, station.observ[(int)DE], station.observ[(int)PR], station.observ[(int)TE],station.observ[(int)SA], ih_pref, hdr.lat, station.observ[i]);
@@ -1750,7 +1756,7 @@ for (jj = 0; jj <= split; jj++) {
                    fprintf(stderr,"\n O2 not available in cdf file, but will be computed from ox, pr, te, sa values");
                }
                break; 
-	       
+
             case S0: 
             case S1: 
             case S2:    /* fall through */
@@ -1787,6 +1793,28 @@ for (jj = 0; jj <= split; jj++) {
                 prop_needed[(int)SA] = 1;
 
                 fprintf(stderr,"\n %.2s not available in cdf file, but will be computed from averaged p,t,s values.", get_prop_mne(i));
+                break;
+
+	    case RR:
+	      /* Nearly identical to the above fall through cases
+	       * except that we also need DE. */
+                compute_flag[i] = prop_avail[(int)PR] && prop_avail[(int) TE] 
+		  && prop_avail[(int) SA] && prop_avail[(int) DE];
+
+                if (compute_flag[i] == 0) {
+                  fprintf(stderr,"\n\n FATAL ERROR!");
+                  fprintf(stderr,"\n Unable to compute %.2s for this file.\n", 
+                          get_prop_mne(i));
+                  fprintf(stderr,"The .cdf file must include pr, te, sa, and de \n"); 
+                  exit (0);
+                }
+
+                prop_needed[(int)PR] = 1;
+                prop_needed[(int)TE] = 1;
+                prop_needed[(int)SA] = 1;
+		prop_needed[(int)DE] = 1;
+
+                fprintf(stderr,"\n %.2s not available in cdf file, but will be computed from averaged p,t,s,d values.", get_prop_mne(i));
                 break;
 
             default:
@@ -2030,6 +2058,15 @@ for (jj = 0; jj <= split; jj++) {
                         }
                          break;
 
+		     case RR:
+		       compute_approx_rossby_radius(station.observ[(int)RR], npts, ((int)z[cdf.nz-1]), station.observ[(int)DE], station.observ[(int)PR], station.observ[(int)TE], station.observ[(int)SA], dlat, window, w_incr);
+                        if (cdf.counts_included) {
+                            for (j = 0; j < npts; ++j) {
+                               count[i][j] = count[(int)TE][j];
+                            }
+                        }
+                         break;
+		       
                      case PE:
                          compute_energy(npts, station.observ[(int)PR], station.observ[(int)TE], station.observ[(int)SA], pe_pref,  station.observ[(int)PE]);
                         if (cdf.counts_included) {

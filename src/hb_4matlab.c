@@ -512,6 +512,15 @@ void get_hydro_data(int file)
                   po_vort(station.observ[i],station.observ[i], hdr.nobs, dlat);
                }
                break;
+
+	     case RR:
+	       if (pts_avail) {
+		 free_and_alloc(&station.observ[i], hdr.nobs);
+		 dlat = (double) hdr.lat;
+		 compute_approx_rossby_radius(station.observ[i], hdr.nobs, hdr.pdr, station.observ[(int)DE], station.observ[(int)PR], station.observ[(int)TE], station.observ[(int)SA], dlat, window, w_incr);
+	       }
+	       break;
+	       
              case BF:
 	       if (pts_avail) {
                   free_and_alloc(&station.observ[i], hdr.nobs);

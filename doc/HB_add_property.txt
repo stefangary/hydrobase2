@@ -40,3 +40,4 @@ If it's not there, then:
       + hb_siftlevs.c
       + hb_siftsta.c
       + hb_slice.c
+      + hb_gridsurf2d.c

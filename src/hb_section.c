@@ -553,6 +553,15 @@ void get_prop(int i, int main_props_avail)
                po_vort(station.observ[i],station.observ[i], hdr.nobs, dlat);
 
                break;
+
+	     case RR:
+               free_and_alloc(&station.observ[i], hdr.nobs);
+               dlat = (double) hdr.lat;
+	       compute_approx_rossby_radius(station.observ[i], hdr.nobs, hdr.pdr, station.observ[(int)DE], station.observ[(int)PR], station.observ[(int)TE], station.observ[(int)SA], dlat, window, w_incr);
+               break;
+
+
+	       
              case BF:
                free_and_alloc(&station.observ[i], hdr.nobs);
                buoy_freq(station.observ[i], station.observ[(int)PR], station.observ[(int)TE],station.observ[(int)SA], hdr.nobs, window, w_incr);

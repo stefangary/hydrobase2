@@ -1136,7 +1136,7 @@ void compute_approx_rossby_radius(double *ro, int nobs, int pdr, double *d, doub
   double *n;
 
   /* Check that pdr is deeper than the deepest measurement. */
-  if (d[nobs-1] > pdr) {
+  if (d[nobs-1] > ((double) pdr)) {
     fprintf(stderr,"\ncompute_approx_rossby_radius ERROR: Deepest obs deeper than seafloor.");
     fprintf(stderr,"\ncompute_approx_rossby_radius ERROR: hb_update_pdr needs to be run first.");
     /* Return missing values. */    
