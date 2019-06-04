@@ -549,6 +549,15 @@ void get_hydro_data(int file)
 		    ++hdr.nprops;
 
                break;
+
+             case RR: 
+               free_and_alloc(&station.observ[i], hdr.nobs);
+               dlat = (double) hdr.lat;
+	       compute_approx_rossby_radius(station.observ[i], hdr.nobs, hdr.pdr, station.observ[(int)DE], station.observ[(int)PR], station.observ[(int)TE], station.observ[(int)SA], dlat, window, w_incr);
+		    hdr.prop_id[hdr.nprops] = i;
+		    ++hdr.nprops;
+
+               break;	       
                
              case BF:
                free_and_alloc(&station.observ[i], hdr.nobs);

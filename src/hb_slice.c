@@ -1334,7 +1334,14 @@ void compute_props(struct HYDRO_HDR *hptr, struct HYDRO_DATA *dptr)
                po_vort(dptr->observ[i], e, hptr->nobs, dlat);
 	       free((void *)e);
                break;
-	        
+
+             case RR:
+               free_and_alloc(&dptr->observ[i], hptr->nobs);
+	       dlat = (double) hptr->lat;
+	       compute_approx_rossby_radius(dptr->observ[i], hptr->nobs, hptr->pdr, dptr->observ[(int)DE], dptr->observ[(int)PR], dptr->observ[(int)TE], dptr->observ[(int)SA], dlat, window, w_incr);
+               break;
+
+	       
              case BF:
                free_and_alloc(&dptr->observ[i], hptr->nobs);
                buoy_freq(dptr->observ[i],  dptr->observ[(int)PR], dptr->observ[(int)TE],dptr->observ[(int)SA], hptr->nobs, window, w_incr);
