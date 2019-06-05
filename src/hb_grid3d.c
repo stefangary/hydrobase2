@@ -634,10 +634,8 @@ int main (int argc, char **argv) {
                case RR:
                   free_and_alloc(&sta.observ[(int)RR], hdr.nobs);
 		  dlat = (double) hdr.lat;
-		  compute_approx_rossby_radius(sta.observ[i], hdr.nobs, hdr.pdr, sta.observ[(int)DE], sta.observ[(int)PR], sta.observ[(int)TE], sta.observ[(int)SA], dlat, window, w_incr);
+		  compute_approx_rossby_radius(sta.observ[(int)RR], hdr.nobs, hdr.pdr, de, pr, te, sa, dlat, window, w_incr);
                   break;
-
-
 		  
                default:
 		   /* Default checks if the property is available
@@ -683,7 +681,7 @@ int main (int argc, char **argv) {
 	   } /* End if check on time bin sort. */
          } /* End for loop over all time bins. */
        } /* End if check on station location in_bounds */
-       
+
        /* Free up space by removing space allocated for
 	* properties which are not being requested. */
        for (i = 0; i < MAXPROP; ++i) {
@@ -985,6 +983,11 @@ int main (int argc, char **argv) {
 		 for (j = 0; j < hdr.nobs; ++j) 
 		   sta.observ[(int)PV][j] *= sta.observ[(int)PV][j];
 		 po_vort(sta.observ[(int)PV],sta.observ[(int)PV], hdr.nobs, (double)hdr.lat);
+		 break;
+
+	       case RR:
+		 free_and_alloc(&sta.observ[(int)RR], hdr.nobs);
+		 compute_approx_rossby_radius(sta.observ[(int)RR], hdr.nobs, hdr.pdr, de, pr, te, sa, (double)hdr.lat, window, w_incr);
 		 break;
 		 
 	       default:

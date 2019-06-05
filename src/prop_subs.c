@@ -1167,11 +1167,11 @@ void compute_approx_rossby_radius(double *ro, int nobs, int pdr, double *d, doub
 
   if (d[nobs-1] < GAP_CHANGE_DEPTH){
     datagap = ( pdr - d[nobs-1]) > GAP_SHALLOW;
-    fprintf(stderr,"\ncompute_approx_rossby_radius WARNING: GAP_SHALLOW detected at bottom!");
+    /*fprintf(stderr,"\ncompute_approx_rossby_radius WARNING: GAP_SHALLOW detected at bottom!");*/
   }
   else{
     datagap = ( pdr - d[nobs-1]) > GAP_DEEP;
-    fprintf(stderr,"\ncompute_approx_rossby_radius WARNING: GAP_DEEP detected at bottom!");
+    /*fprintf(stderr,"\ncompute_approx_rossby_radius WARNING: GAP_DEEP detected at bottom!");*/
   }
 
   if (datagap) {
@@ -1192,7 +1192,7 @@ void compute_approx_rossby_radius(double *ro, int nobs, int pdr, double *d, doub
     * Note, if we just check for < 0, it will
     * lose memory of any values set to HB_MISSING,
     * so keep those. */
-   for (j = start-1; j >= 0; --j) {
+   for (j = nobs-1; j >= 0; --j) {
      if ( n[j] < 0.0 ) {
        if ( n[j] == HB_MISSING ) {
        /* Leave the HB_MISSING value */
@@ -1206,7 +1206,7 @@ void compute_approx_rossby_radius(double *ro, int nobs, int pdr, double *d, doub
    /* If the bottom value of the profile is missing,
     * we cannot start the integration, so exit. */
    if ( n[nobs-1] == HB_MISSING ) {
-     fprintf(stderr,"\ncompute_approx_rossby_radius WARNING: HB_MISSING detected at deepest observation!");
+     /*fprintf(stderr,"\ncompute_approx_rossby_radius WARNING: HB_MISSING detected at deepest observation!");*/
       /* Return missing values. */    
       for (i = 0; i < nobs; ++i) {
         ro[i] = HB_MISSING;
@@ -1282,10 +1282,10 @@ void compute_approx_rossby_radius(double *ro, int nobs, int pdr, double *d, doub
    
    /*==============================================================
     * Sanity check - if surface value is less than zero, there was
-    * a massive density inversion.  Report missing values.
+    * a massive density inversion.  Return missing values.
     */
    if ( ro[0] < 0 ) {
-     fprintf(stderr,"\ncompute_approx_rossby_radius WARNING: Massive density inversion detected!");
+     /*fprintf(stderr,"\ncompute_approx_rossby_radius WARNING: Massive density inversion detected!");*/
      for (i = 0; i < nobs; ++i) {
        ro[i] = HB_MISSING;
      }
