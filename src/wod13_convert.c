@@ -1352,15 +1352,13 @@ int check_profile_flag(int flag) {
   case 0:   /* fall through */
   case 1:   /* Ruth allows */
   case 2:   /* Ruth allows */
-    /*
-  case 3:   Flagged cruise!
-  case 4:
-  case 5:
-  case 6:
-  case 7:
-  case 8:
-  case 9:
-    */
+    /*case 3:   /* Flagged cruise! Testing */
+    /*case 4:   /* Testing */
+    /*case 5:   /* Testing */
+    /*case 6:   /* Testing */
+    /*case 7:   /* Testing */
+    /*case 8:   /* Testing */
+    /*case 9:   /* Testing */
     return 1;
   default:
     return 0;
